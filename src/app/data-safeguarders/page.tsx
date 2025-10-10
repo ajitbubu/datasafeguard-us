@@ -82,14 +82,14 @@ export default function DataSafeguardersPage() {
         transition={{ delay: i * 0.08 }}
       >
         <div className="mb-6">
-          <div className="w-20 h-20 rounded-full overflow-hidden mx-auto group-hover:scale-110 transition-transform duration-200 bg-gradient-primary flex items-center justify-center">
+          <div className="w-16 sm:w-20 md:w-24 aspect-square rounded-full overflow-hidden mx-auto group-hover:scale-110 transition-transform duration-200 bg-gradient-primary flex items-center justify-center ring-2 ring-primary/25">
             {showImage ? (
               <Image
                 src={member.image as string}
                 alt={`${member.name} photo`}
                 width={80}
                 height={80}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover rounded-full"
                 priority={gi === 0 && i < 3}
                 onError={() => setImgError(true)}
               />
