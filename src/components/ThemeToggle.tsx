@@ -52,12 +52,12 @@ export default function ThemeToggle() {
 
   const currentIcon = resolvedTheme === "dark"
     ? (
-      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
         <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" strokeWidth="2" />
       </svg>
     )
     : (
-      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
         <circle cx="12" cy="12" r="4" strokeWidth="2" />
         <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M17.66 6.34l1.41-1.41M4.93 19.07l1.41-1.41" strokeWidth="2" />
       </svg>
@@ -75,10 +75,14 @@ export default function ThemeToggle() {
     <div className="relative" ref={containerRef}>
       <motion.button
         type="button"
-        className="flex items-center gap-2 px-3 py-2 rounded-full bg-muted border border-border text-sm text-foreground hover:bg-muted/80 transition-colors"
+        className="flex items-center gap-2 px-3 h-10 rounded-lg bg-muted border border-border text-foreground hover:bg-muted/80 shadow-sm transition-colors cursor-pointer"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.2 }}
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.96 }}
+        whileFocus={{ scale: 1.04 }}
+        transition={{ type: "spring", stiffness: 420, damping: 25 }}
+        style={{ willChange: "transform" }}
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label="Toggle theme menu"
@@ -86,10 +90,6 @@ export default function ThemeToggle() {
         onKeyDown={handleKeyDown}
       >
         {currentIcon}
-        <span className="font-medium capitalize">{theme}</span>
-        <svg className={`w-4 h-4 transition-transform ${open ? "rotate-180" : "rotate-0"}`} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-          <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clipRule="evenodd" />
-        </svg>
       </motion.button>
 
       <AnimatePresence>
@@ -101,19 +101,23 @@ export default function ThemeToggle() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.15 }}
-            className="absolute right-0 mt-2 w-40 rounded-lg bg-muted border border-border shadow-lg backdrop-blur-md overflow-hidden z-50"
+            className="absolute right-0 mt-2 w-44 rounded-lg bg-muted border border-border shadow-md overflow-hidden z-50"
           >
-            {options.map((opt) => (
+            {[{ key: "light", label: "Light" }, { key: "dark", label: "Dark" }, { key: "system", label: "System" }].map((opt) => (
               <button
                 key={opt.key}
                 role="menuitem"
                 onClick={() => { setTheme(opt.key as Theme); setOpen(false); }}
-                className={`flex items-center gap-2 w-full text-left px-3 py-2 text-sm transition-colors ${
-                  theme === opt.key ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/80 hover:text-foreground"
+                className={`flex items-center justify-between w-full px-4 py-2 text-base transition-colors ${
+                  theme === opt.key ? "bg-primary/10 text-primary" : "text-foreground hover:bg-muted/80"
                 }`}
               >
-                {opt.icon}
                 <span>{opt.label}</span>
+                {theme === opt.key && (
+                  <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fillRule="evenodd" d="M16.704 5.29a1 1 0 010 1.42l-7.5 7.5a1 1 0 01-1.42 0l-3-3a1 1 0 111.42-1.42l2.29 2.29 6.79-6.79a1 1 0 011.42 0z" clipRule="evenodd" />
+                  </svg>
+                )}
               </button>
             ))}
           </motion.div>

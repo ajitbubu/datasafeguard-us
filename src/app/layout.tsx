@@ -34,6 +34,11 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css"
         />
+        <link
+          href="https://cdn.prod.website-files.com/646e363f9c29e4860c52c82e/646e363f9c29e4860c52c89d_logo32.png"
+          rel="shortcut icon"
+          type="image/x-icon"
+        />
       </head>
       <body className={`${inter.variable} antialiased bg-background text-foreground min-h-screen flex flex-col transition-colors duration-300`}>
         <ThemeProvider>

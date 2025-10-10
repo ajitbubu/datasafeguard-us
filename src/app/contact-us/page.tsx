@@ -1,8 +1,90 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useState, useRef } from "react";
 
 export default function ContactUsPage() {
+  // Form state
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    company: "",
+    subject: "",
+    message: "",
+  });
+  const [errors, setErrors] = useState<{ [k: string]: string }>({});
+  const firstInvalidRef = useRef<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | null>(null);
+
+  function validateField(name: string, value: string) {
+    switch (name) {
+      case "firstName":
+      case "lastName":
+        if (!value.trim()) return "This field is required.";
+        if (value.trim().length < 2) return "Must be at least 2 characters.";
+        return "";
+      case "email": {
+        if (!value.trim()) return "Email is required.";
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value.trim())) return "Enter a valid email address.";
+        return "";
+      }
+      case "company":
+        if (!value.trim()) return "Company is required.";
+        return "";
+      case "subject":
+        if (!value.trim()) return "Please select a subject.";
+        return "";
+      case "message":
+        if (!value.trim()) return "Message is required.";
+        if (value.trim().length < 20) return "Provide at least 20 characters for context.";
+        return "";
+      default:
+        return "";
+    }
+  }
+
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    // Clear error as user types if valid
+    const err = validateField(name, value);
+    setErrors((prev) => ({ ...prev, [name]: err }));
+  }
+
+  function handleBlur(
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) {
+    const { name, value } = e.target;
+    const err = validateField(name, value);
+    setErrors((prev) => ({ ...prev, [name]: err }));
+  }
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const newErrors: { [k: string]: string } = {};
+    (Object.keys(form) as Array<keyof typeof form>).forEach((key) => {
+      const err = validateField(key, String(form[key]));
+      if (err) newErrors[key] = err;
+    });
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      // Focus the first invalid field for accessibility
+      const firstInvalidKey = Object.keys(newErrors)[0];
+      const el = document.querySelector(
+        `[name="${firstInvalidKey}"]`
+      ) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | null;
+      firstInvalidRef.current = el;
+      el?.focus();
+      return;
+    }
+
+    // Valid submission placeholder
+    alert("Thanks! Your message looks good. We’ll get back to you.");
+  }
   const contactInfo = [
     {
       icon: "M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z",
@@ -136,23 +218,41 @@ export default function ContactUsPage() {
           >
             <h2 className="text-2xl font-bold mb-6">Send us a Message</h2>
             
-            <form className="space-y-6">
+            <form className="space-y-6" noValidate onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium mb-2">First Name</label>
                   <input 
                     type="text"
-                    className="w-full px-4 py-3 border border-border rounded-lg bg-background focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                    name="firstName"
+                    value={form.firstName}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    aria-invalid={Boolean(errors.firstName) || undefined}
+                    aria-describedby={errors.firstName ? "firstName-error" : undefined}
+                    className={`w-full px-4 py-3 border rounded-lg bg-background focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${errors.firstName ? "border-red-500" : "border-border"}`}
                     placeholder="John"
                   />
+                  {errors.firstName && (
+                    <p id="firstName-error" className="mt-2 text-sm text-red-600" role="alert">{errors.firstName}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">Last Name</label>
                   <input 
                     type="text"
-                    className="w-full px-4 py-3 border border-border rounded-lg bg-background focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                    name="lastName"
+                    value={form.lastName}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    aria-invalid={Boolean(errors.lastName) || undefined}
+                    aria-describedby={errors.lastName ? "lastName-error" : undefined}
+                    className={`w-full px-4 py-3 border rounded-lg bg-background focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${errors.lastName ? "border-red-500" : "border-border"}`}
                     placeholder="Doe"
                   />
+                  {errors.lastName && (
+                    <p id="lastName-error" className="mt-2 text-sm text-red-600" role="alert">{errors.lastName}</p>
+                  )}
                 </div>
               </div>
               
@@ -160,38 +260,77 @@ export default function ContactUsPage() {
                 <label className="block text-sm font-medium mb-2">Email Address</label>
                 <input 
                   type="email"
-                  className="w-full px-4 py-3 border border-border rounded-lg bg-background focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  aria-invalid={Boolean(errors.email) || undefined}
+                  aria-describedby={errors.email ? "email-error" : undefined}
+                  className={`w-full px-4 py-3 border rounded-lg bg-background focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${errors.email ? "border-red-500" : "border-border"}`}
                   placeholder="john@company.com"
                 />
+                {errors.email && (
+                  <p id="email-error" className="mt-2 text-sm text-red-600" role="alert">{errors.email}</p>
+                )}
               </div>
               
               <div>
                 <label className="block text-sm font-medium mb-2">Company</label>
                 <input 
                   type="text"
-                  className="w-full px-4 py-3 border border-border rounded-lg bg-background focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                  name="company"
+                  value={form.company}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  aria-invalid={Boolean(errors.company) || undefined}
+                  aria-describedby={errors.company ? "company-error" : undefined}
+                  className={`w-full px-4 py-3 border rounded-lg bg-background focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${errors.company ? "border-red-500" : "border-border"}`}
                   placeholder="Your Company"
                 />
+                {errors.company && (
+                  <p id="company-error" className="mt-2 text-sm text-red-600" role="alert">{errors.company}</p>
+                )}
               </div>
               
               <div>
                 <label className="block text-sm font-medium mb-2">Subject</label>
-                <select className="w-full px-4 py-3 border border-border rounded-lg bg-background focus:ring-2 focus:ring-primary focus:border-transparent transition-colors">
-                  <option>General Inquiry</option>
-                  <option>Security Consultation</option>
-                  <option>Partnership Opportunity</option>
-                  <option>Technical Support</option>
-                  <option>Compliance Question</option>
+                <select
+                  name="subject"
+                  value={form.subject}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  aria-invalid={Boolean(errors.subject) || undefined}
+                  aria-describedby={errors.subject ? "subject-error" : undefined}
+                  className={`w-full px-4 py-3 border rounded-lg bg-background focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${errors.subject ? "border-red-500" : "border-border"}`}
+                >
+                  <option value="">Select a subject</option>
+                  <option value="General Inquiry">General Inquiry</option>
+                  <option value="Security Consultation">Security Consultation</option>
+                  <option value="Partnership Opportunity">Partnership Opportunity</option>
+                  <option value="Technical Support">Technical Support</option>
+                  <option value="Compliance Question">Compliance Question</option>
                 </select>
+                {errors.subject && (
+                  <p id="subject-error" className="mt-2 text-sm text-red-600" role="alert">{errors.subject}</p>
+                )}
               </div>
               
               <div>
                 <label className="block text-sm font-medium mb-2">Message</label>
                 <textarea 
                   rows={5}
-                  className="w-full px-4 py-3 border border-border rounded-lg bg-background focus:ring-2 focus:ring-primary focus:border-transparent transition-colors resize-none"
+                  name="message"
+                  value={form.message}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  aria-invalid={Boolean(errors.message) || undefined}
+                  aria-describedby={errors.message ? "message-error" : undefined}
+                  className={`w-full px-4 py-3 border rounded-lg bg-background focus:ring-2 focus:ring-primary focus:border-transparent transition-colors resize-none ${errors.message ? "border-red-500" : "border-border"}`}
                   placeholder="Tell us about your data security needs..."
                 />
+                {errors.message && (
+                  <p id="message-error" className="mt-2 text-sm text-red-600" role="alert">{errors.message}</p>
+                )}
               </div>
               
               <button 
