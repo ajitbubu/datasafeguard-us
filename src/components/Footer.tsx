@@ -1,8 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  const socialUrl = process.env.NEXT_PUBLIC_SOCIAL_URL || "https://linkedin.com/company/datasafeguard";
   
   const footerLinks = [
     { href: "/privacy", label: "Privacy Policy" },
@@ -25,9 +25,11 @@ export default function Footer() {
           {/* Company Info */}
           <div className="md:col-span-2">
             <div className="flex items-center mb-4">
-              <img 
+              <Image 
                 src="/brand-logo.svg" 
                 alt="DataSafeguard Logo" 
+                width={120}
+                height={48}
                 className="h-12 w-auto"
               />
             </div>

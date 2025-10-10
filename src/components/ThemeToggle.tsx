@@ -3,26 +3,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { useTheme, type Theme } from "./ThemeProvider";
 
-const options = [
-  { key: "system", label: "System", icon: (
-    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-      <circle cx="12" cy="12" r="9" strokeWidth="2" />
-      <path d="M12 3v18M3 12h18" strokeWidth="2" />
-    </svg>
-  ) },
-  { key: "light", label: "Light", icon: (
-    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-      <circle cx="12" cy="12" r="4" strokeWidth="2" />
-      <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M17.66 6.34l1.41-1.41M4.93 19.07l1.41-1.41" strokeWidth="2" />
-    </svg>
-  ) },
-  { key: "dark", label: "Dark", icon: (
-    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-      <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" strokeWidth="2" />
-    </svg>
-  ) },
-] as const;
-
 export default function ThemeToggle() {
   const { theme, resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);

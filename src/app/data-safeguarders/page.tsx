@@ -16,7 +16,7 @@ export default function DataSafeguardersPage() {
     members: Member[];
   };
 
-  const groups: Group[] = [
+  const groups: Group[] = useMemo(() => [
     {
       title: "Founding Team",
       members: [
@@ -57,7 +57,7 @@ export default function DataSafeguardersPage() {
         { name: "John Papazian", role: "Advisory Board Moderator" },
       ],
     },
-  ];
+  ], []);
 
   const tabNames = useMemo(() => ["All", ...groups.map((g) => g.title)], [groups]);
   const [activeTab, setActiveTab] = useState<string>(tabNames[0]);
@@ -78,7 +78,6 @@ export default function DataSafeguardersPage() {
 
   function MemberCard({ member, i, gi }: { member: Member; i: number; gi: number }) {
     const [imgError, setImgError] = useState(false);
-    const showImage = !!member.image && !imgError;
     const localMap: Record<string, string> = {
       "mr sahu": "/people/MSahu.jpg",
       "sudhir sahu": "/people/sudhir.jpg",

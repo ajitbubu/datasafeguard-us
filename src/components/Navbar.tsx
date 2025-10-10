@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import ThemeToggle from "./ThemeToggle";
 
@@ -20,9 +21,11 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 group">
             <div className="flex items-center group-hover:scale-105 transition-transform duration-200">
-              <img 
+              <Image 
                 src="/brand-logo.svg" 
                 alt="DataSafeguard Logo" 
+                width={120}
+                height={48}
                 className="h-12 w-auto"
               />
             </div>
