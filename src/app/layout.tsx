@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { ThemeProvider } from "../components/ThemeProvider";
+import GoogleAnalytics from "../components/GoogleAnalytics";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -11,10 +12,26 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "DataSafeguard - Enterprise Data Protection & Security Solutions",
-  description: "Leading enterprise data protection platform offering comprehensive security, compliance, and privacy solutions. Safeguard your data with confidence.",
-  keywords: "data protection, cybersecurity, compliance, privacy, enterprise security, data governance",
+  title: "DataSafeguard.us | AI Data Privacy, Security & Governance Platform",
+  description: "DataSafeguard.us helps enterprises automate data privacy, AI governance, and compliance across cloud and hybrid environments. Ensure PDPA, GDPR, and AI security compliance with one platform.",
+  keywords: "AI data security, data privacy automation, AI governance platform, data protection and compliance, data governance software, data security posture management, consent and preference management, generative AI privacy protection, PDPA compliance Singapore, data privacy platform Singapore, data protection and privacy software, hybrid cloud data privacy, privacy automation tool, AI data protection enterprise, GDPR and PDPA compliance, real-time policy enforcement AI, prevent data leakage AI models, secure ML pipeline, enterprise AI governance Singapore, data breach compliance Singapore",
   authors: [{ name: "DataSafeguard Team" }],
+  robots: "index, follow",
+  openGraph: {
+    title: "DataSafeguard.us | Data Privacy & AI Governance Platform",
+    description: "Automate data protection, AI governance, and privacy compliance across hybrid cloud environments. Trusted by enterprises for PDPA and GDPR compliance.",
+    url: "https://datasafeguard.us",
+    siteName: "DataSafeguard.us",
+    type: "website",
+    images: [
+      {
+        url: "https://datasafeguard.ai/assets/og-banner.png",
+        width: 1200,
+        height: 630,
+        alt: "DataSafeguard.us - AI Data Privacy & Governance Platform",
+      },
+    ],
+  },
 };
 
 export const viewport: Viewport = {
@@ -41,6 +58,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.variable} antialiased bg-background text-foreground min-h-screen flex flex-col transition-colors duration-300`}>
+        <GoogleAnalytics />
         <ThemeProvider>
           <Navbar />
           <main className="flex-1">

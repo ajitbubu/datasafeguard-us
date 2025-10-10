@@ -121,14 +121,14 @@ export default function Home() {
 
                 {/* Main Heading */}
                 <motion.h1
-                  className="text-5xl lg:text-7xl font-bold leading-tight"
+                  className="text-4xl lg:text-6xl font-bold leading-tight"
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.8 }}
                 >
-                  Secure Your{" "}
+                  World's #1 Leading{" "}
                   <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                    Digital Future
+                    AI-Powered Data Privacy Management Company
                   </span>
                 </motion.h1>
 
@@ -152,7 +152,7 @@ export default function Home() {
                 >
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Link href="/contact-us" className="btn-primary text-lg px-8 py-4 inline-flex items-center gap-2">
-                      Start Free Trial
+                      Request Demo
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                       </svg>
@@ -160,7 +160,7 @@ export default function Home() {
                   </motion.div>
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Link href="/product-offering" className="border border-white/30 hover:border-primary text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 inline-flex items-center gap-2 backdrop-blur-sm">
-                      Watch Demo
+                      See Our Product
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M19 10a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>

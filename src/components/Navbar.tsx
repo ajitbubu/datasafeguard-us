@@ -34,7 +34,7 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors duration-200 relative group"
+                className="text-sm font-medium text-black hover:text-primary transition-colors duration-200 relative group"
               >
                 {item.label}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-200 group-hover:w-full"></span>
@@ -54,7 +54,7 @@ export default function Navbar() {
           {/* Mobile menu button */}
           <button
             onClick={() => setOpen(!open)}
-            className="md:hidden p-2 rounded-lg text-muted-foreground hover:text-primary hover:bg-muted transition-colors duration-200"
+            className="md:hidden p-2 rounded-lg text-black hover:text-primary hover:bg-muted transition-colors duration-200"
             aria-label="Toggle menu"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -75,7 +75,7 @@ export default function Navbar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="block px-3 py-2 text-base font-medium text-muted-foreground hover:text-primary hover:bg-muted rounded-lg transition-colors duration-200"
+                  className="block px-3 py-2 text-base font-medium text-black hover:text-primary hover:bg-muted rounded-lg transition-colors duration-200"
                   onClick={() => setOpen(false)}
                 >
                   {item.label}

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 export default function DataSafeguardersPage() {
   type Member = {
@@ -59,6 +59,13 @@ export default function DataSafeguardersPage() {
     },
   ];
 
+  const tabNames = useMemo(() => ["All", ...groups.map((g) => g.title)], [groups]);
+  const [activeTab, setActiveTab] = useState<string>(tabNames[0]);
+
+  const visibleGroups = useMemo(() => {
+    return activeTab === "All" ? groups : groups.filter((g) => g.title === activeTab);
+  }, [activeTab, groups]);
+
   function initialsFrom(name: string) {
     return name
       .split(" ")
@@ -72,20 +79,31 @@ export default function DataSafeguardersPage() {
   function MemberCard({ member, i, gi }: { member: Member; i: number; gi: number }) {
     const [imgError, setImgError] = useState(false);
     const showImage = !!member.image && !imgError;
+    const localMap: Record<string, string> = {
+      "mr sahu": "/people/MSahu.jpg",
+      "sudhir sahu": "/people/sudhir.jpg",
+      "lee nocon": "/people/lee.jpg",
+      "lee c. nocon": "/people/lee.jpg",
+      "dr. damodar sahu": "/people/damodar.jpg",
+      "swarnam dash": "/people/swarn.png",
+      "tedra chen": "/people/tedra.jpg",
+    };
+    const key = member.name.trim().toLowerCase();
+    const imageSrc = !imgError ? localMap[key] ?? member.image : undefined;
     return (
       <motion.div
         key={`${gi}-${member.name}`}
-        className="card group hover:shadow-glow-primary transition-all duration-300 text-center"
+        className="card group card-hover"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ delay: i * 0.08 }}
       >
-        <div className="mb-6">
-          <div className="w-16 sm:w-20 md:w-24 aspect-square rounded-full overflow-hidden mx-auto group-hover:scale-110 transition-transform duration-200 bg-gradient-primary flex items-center justify-center ring-2 ring-primary/25">
-            {showImage ? (
+        <div className="flex items-center gap-4 md:gap-6">
+          <div className="w-16 md:w-20 aspect-square rounded-full overflow-hidden flex items-center justify-center bg-gradient-primary ring-2 ring-primary/25 ring-offset-2 ring-offset-background">
+            {imageSrc ? (
               <Image
-                src={member.image as string}
+                src={imageSrc as string}
                 alt={`${member.name} photo`}
                 width={80}
                 height={80}
@@ -97,10 +115,11 @@ export default function DataSafeguardersPage() {
               <span className="text-white font-bold text-lg">{initialsFrom(member.name)}</span>
             )}
           </div>
+          <div className="flex-1">
+            <h3 className="text-lg md:text-xl font-semibold group-hover:text-primary transition-colors">{member.name}</h3>
+            <p className="text-muted-foreground text-sm">{member.role}</p>
+          </div>
         </div>
-
-        <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">{member.name}</h3>
-        <p className="text-primary font-medium mb-3">{member.role}</p>
       </motion.div>
     );
   }
@@ -129,14 +148,47 @@ export default function DataSafeguardersPage() {
       </section>
 
       {/* Team Sections */}
+      {/* Controls */}
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-start gap-4">
+          {/* Tabs */}
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
+            {tabNames.map((tab) => {
+              const active = activeTab === tab;
+              return (
+                <motion.button
+                  key={tab}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-3 py-1.5 text-sm rounded-full border transition-colors whitespace-nowrap ${
+                    active
+                      ? "bg-primary text-white border-primary"
+                      : "bg-transparent text-foreground border-border hover:bg-primary/10"
+                  }`}
+                >
+                  {tab}
+                </motion.button>
+              );
+            })}
+          </div>
+
+          {/* Search removed */}
+        </div>
+      </section>
+
+      {/* Team Sections */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {groups.map((group, gi) => (
+        {visibleGroups.map((group, gi) => (
           <div key={group.title} className={gi === 0 ? "" : "mt-14"}>
             <h2 className="text-2xl font-bold mb-6">{group.title}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {group.members.map((member, i) => (
-                <MemberCard key={`${group.title}-${member.name}`} member={member} i={i} gi={gi} />
-              ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
+              {group.members.length === 0 ? (
+                <p className="text-muted-foreground">No matching members in this group.</p>
+              ) : (
+                group.members.map((member, i) => (
+                  <MemberCard key={`${group.title}-${member.name}`} member={member} i={i} gi={gi} />
+                ))
+              )}
             </div>
           </div>
         ))}
