@@ -126,7 +126,7 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.8 }}
                 >
-                  World's #1 Leading{" "}
+                  World&apos;s #1 Leading{" "}
                   <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                     AI-Powered Data Privacy Management Company
                   </span>
