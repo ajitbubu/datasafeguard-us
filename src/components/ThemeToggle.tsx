@@ -1,0 +1,124 @@
+"use client";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { useTheme, type Theme } from "./ThemeProvider";
+
+const options = [
+  { key: "system", label: "System", icon: (
+    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+      <circle cx="12" cy="12" r="9" strokeWidth="2" />
+      <path d="M12 3v18M3 12h18" strokeWidth="2" />
+    </svg>
+  ) },
+  { key: "light", label: "Light", icon: (
+    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+      <circle cx="12" cy="12" r="4" strokeWidth="2" />
+      <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M17.66 6.34l1.41-1.41M4.93 19.07l1.41-1.41" strokeWidth="2" />
+    </svg>
+  ) },
+  { key: "dark", label: "Dark", icon: (
+    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+      <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" strokeWidth="2" />
+    </svg>
+  ) },
+] as const;
+
+export default function ThemeToggle() {
+  const { theme, resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => setMounted(true), []);
+
+  // Close on outside click
+  useEffect(() => {
+    function onDocClick(e: MouseEvent) {
+      if (!containerRef.current) return;
+      if (!containerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="relative">
+        <div className="w-10 h-10 rounded-full bg-muted border border-border" />
+      </div>
+    );
+  }
+
+  const currentIcon = resolvedTheme === "dark"
+    ? (
+      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" strokeWidth="2" />
+      </svg>
+    )
+    : (
+      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+        <circle cx="12" cy="12" r="4" strokeWidth="2" />
+        <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M17.66 6.34l1.41-1.41M4.93 19.07l1.41-1.41" strokeWidth="2" />
+      </svg>
+    );
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLButtonElement>) {
+    if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      setOpen(true);
+    }
+    if (e.key === "Escape") setOpen(false);
+  }
+
+  return (
+    <div className="relative" ref={containerRef}>
+      <motion.button
+        type="button"
+        className="flex items-center gap-2 px-3 py-2 rounded-full bg-muted border border-border text-sm text-foreground hover:bg-muted/80 transition-colors"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.2 }}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-label="Toggle theme menu"
+        onClick={() => setOpen(o => !o)}
+        onKeyDown={handleKeyDown}
+      >
+        {currentIcon}
+        <span className="font-medium capitalize">{theme}</span>
+        <svg className={`w-4 h-4 transition-transform ${open ? "rotate-180" : "rotate-0"}`} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.27a.75.75 0 01-.02-1.06z" clipRule="evenodd" />
+        </svg>
+      </motion.button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            role="menu"
+            aria-label="Theme options"
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.15 }}
+            className="absolute right-0 mt-2 w-40 rounded-lg bg-muted border border-border shadow-lg backdrop-blur-md overflow-hidden z-50"
+          >
+            {options.map((opt) => (
+              <button
+                key={opt.key}
+                role="menuitem"
+                onClick={() => { setTheme(opt.key as Theme); setOpen(false); }}
+                className={`flex items-center gap-2 w-full text-left px-3 py-2 text-sm transition-colors ${
+                  theme === opt.key ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/80 hover:text-foreground"
+                }`}
+              >
+                {opt.icon}
+                <span>{opt.label}</span>
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
