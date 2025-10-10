@@ -9,7 +9,7 @@ export default function Navbar() {
   const navItems = [
     { href: "/storefront", label: "Solutions" },
     { href: "/product-offering", label: "Products" },
-    { href: "/data-safeguarders", label: "Team" },
+    { href: "/team", label: "Team" },
     { href: "/contact-us", label: "Contact" },
   ];
 

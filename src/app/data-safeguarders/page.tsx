@@ -1,46 +1,109 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
+import { useState } from "react";
 
 export default function DataSafeguardersPage() {
-  const teamMembers = [
+  type Member = {
+    name: string;
+    role: string;
+    image?: string;
+  };
+
+  type Group = {
+    title: string;
+    members: Member[];
+  };
+
+  const groups: Group[] = [
     {
-      name: "Alex Rodriguez",
-      role: "Chief Security Officer",
-      expertise: "Cybersecurity Strategy & Risk Management",
-      image: "AR"
+      title: "Founding Team",
+      members: [
+        { name: "MR Sahu", role: "Chairman", image: "/people/MSahu.jpg" },
+        {
+          name: "Sudhir Sahu",
+          role: "Founder & CEO",
+          image:
+            "https://cdn.prod.website-files.com/646e363f9c29e4860c52c851/64e3f0f1d5c03d1efddd0137_Sudhir-p-800.jpg",
+        },
+        { name: "Lee Nocon", role: "Chief Technology Officer" },
+        { name: "Dr. Damodar Sahu", role: "Chief Growth Officer" },
+        { name: "Swarnam Dash", role: "Product Manager" },
+      ],
     },
     {
-      name: "Priya Sharma",
-      role: "Privacy Engineering Lead",
-      expertise: "Data Protection & GDPR Compliance",
-      image: "PS"
+      title: "Leadership Team (USA)",
+      members: [
+        { name: "Tedra Chen", role: "Corporate Manager" },
+        { name: "Sudhir Sahu", role: "Founder & CEO" },
+        { name: "Lee C. Nocon", role: "Chief Technology Officer" },
+        { name: "Dr. Damodar Sahu", role: "Chief Growth Officer" },
+      ],
     },
     {
-      name: "Mateo Chen",
-      role: "Security Architect",
-      expertise: "Infrastructure Security & Zero Trust",
-      image: "MC"
+      title: "Leadership Team (India) & Advisory",
+      members: [
+        { name: "Sumeet Shah", role: "Technology Manager & Co-Founder" },
+        { name: "Pranab Mohanty", role: "Chief Business Officer" },
+        { name: "Mahi Gupta", role: "Director of Privacy Strategy" },
+        { name: "Dr. Deepak Kumar Sahu", role: "Co-Founder" },
+        { name: "N. S. Bala", role: "Executive Advisor" },
+        { name: "Jay Como", role: "Financial Services Executive" },
+        { name: "Joe Clemons", role: "Executive Advisor" },
+        { name: "Dr. Amar Patnaik", role: "Senior Advisor" },
+        { name: "Rameesh Kailasam", role: "Executive Advisor" },
+        { name: "Kevin Jurovich", role: "Executive Advisor" },
+        { name: "John Papazian", role: "Advisory Board Moderator" },
+      ],
     },
-    {
-      name: "Jordan Kim",
-      role: "Compliance Manager",
-      expertise: "Regulatory Compliance & Auditing",
-      image: "JK"
-    },
-    {
-      name: "Chen Wei",
-      role: "Threat Intelligence Analyst",
-      expertise: "Threat Detection & Incident Response",
-      image: "CW"
-    },
-    {
-      name: "Ava Thompson",
-      role: "Security Training Specialist",
-      expertise: "Security Awareness & Education",
-      image: "AT"
-    }
   ];
+
+  function initialsFrom(name: string) {
+    return name
+      .split(" ")
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((w) => w[0])
+      .join("")
+      .toUpperCase();
+  }
+
+  function MemberCard({ member, i, gi }: { member: Member; i: number; gi: number }) {
+    const [imgError, setImgError] = useState(false);
+    const showImage = !!member.image && !imgError;
+    return (
+      <motion.div
+        key={`${gi}-${member.name}`}
+        className="card group hover:shadow-glow-primary transition-all duration-300 text-center"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: i * 0.08 }}
+      >
+        <div className="mb-6">
+          <div className="w-20 h-20 rounded-full overflow-hidden mx-auto group-hover:scale-110 transition-transform duration-200 bg-gradient-primary flex items-center justify-center">
+            {showImage ? (
+              <Image
+                src={member.image as string}
+                alt={`${member.name} photo`}
+                width={80}
+                height={80}
+                className="w-full h-full object-cover"
+                priority={gi === 0 && i < 3}
+                onError={() => setImgError(true)}
+              />
+            ) : (
+              <span className="text-white font-bold text-lg">{initialsFrom(member.name)}</span>
+            )}
+          </div>
+        </div>
+
+        <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">{member.name}</h3>
+        <p className="text-primary font-medium mb-3">{member.role}</p>
+      </motion.div>
+    );
+  }
 
   return (
     <div className="min-h-screen py-20">
@@ -65,52 +128,18 @@ export default function DataSafeguardersPage() {
         </motion.p>
       </section>
 
-      {/* Team Grid */}
+      {/* Team Sections */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {teamMembers.map((member, i) => (
-            <motion.div
-              key={member.name}
-              className="card group hover:shadow-glow-primary transition-all duration-300 text-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-            >
-              {/* Avatar */}
-              <div className="mb-6">
-                <div className="w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-200">
-                  <span className="text-white font-bold text-lg">{member.image}</span>
-                </div>
-              </div>
-              
-              {/* Member Info */}
-              <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
-                {member.name}
-              </h3>
-              <p className="text-primary font-medium mb-3">
-                {member.role}
-              </p>
-              <p className="text-muted-foreground text-sm leading-relaxed mb-6">
-                {member.expertise}
-              </p>
-              
-              {/* Social Links */}
-              <div className="flex justify-center space-x-4">
-                <button className="w-8 h-8 bg-muted rounded-full flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                  </svg>
-                </button>
-                <button className="w-8 h-8 bg-muted rounded-full flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-                  </svg>
-                </button>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        {groups.map((group, gi) => (
+          <div key={group.title} className={gi === 0 ? "" : "mt-14"}>
+            <h2 className="text-2xl font-bold mb-6">{group.title}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {group.members.map((member, i) => (
+                <MemberCard key={`${group.title}-${member.name}`} member={member} i={i} gi={gi} />
+              ))}
+            </div>
+          </div>
+        ))}
       </section>
 
       {/* Call to Action */}
