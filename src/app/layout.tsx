@@ -7,6 +7,7 @@ import { ThemeProvider } from "../components/ThemeProvider";
 import GoogleAnalytics from "../components/GoogleAnalytics";
 import StructuredData from "../components/StructuredData";
 import PerformanceMonitor from "../components/PerformanceMonitor";
+import ScrollToTop from "../components/ScrollToTop";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -69,6 +70,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <ScrollToTop />
         </ThemeProvider>
       </body>
     </html>

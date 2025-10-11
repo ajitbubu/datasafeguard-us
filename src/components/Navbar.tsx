@@ -28,7 +28,7 @@ export default function Navbar() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-  
+
   const navItems = [
     { href: "/storefront", label: "Solutions" },
     { href: "/product-offering", label: "Products" },
@@ -56,9 +56,9 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 group">
             <div className="flex items-center group-hover:scale-105 transition-transform duration-200">
-              <Image 
-                src={logoSrc} 
-                alt="DataSafeguard Logo" 
+              <Image
+                src={logoSrc}
+                alt="DataSafeguard Logo"
                 width={120}
                 height={48}
                 className="h-12 w-auto"
@@ -78,7 +78,7 @@ export default function Navbar() {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-200 group-hover:w-full"></span>
               </Link>
             ))}
-            
+
             {/* Company Dropdown */}
             <div className="relative" ref={companyDropdownRef}>
               <button
@@ -87,10 +87,10 @@ export default function Navbar() {
                 className={`text-sm font-medium hover:text-primary transition-colors duration-200 relative group flex items-center gap-1 ${textColorClass}`}
               >
                 Company
-                <motion.svg 
-                  className="w-4 h-4" 
-                  fill="none" 
-                  stroke="currentColor" 
+                <motion.svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
                   viewBox="0 0 24 24"
                   animate={{ rotate: companyDropdownOpen ? 180 : 0 }}
                   transition={{ duration: 0.2 }}
@@ -140,26 +140,25 @@ export default function Navbar() {
               Contact
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-200 group-hover:w-full"></span>
             </Link>
-            
-            <div className="ml-2">
-              <ThemeToggle />
-            </div>
           </nav>
 
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setOpen(!open)}
-            className={`lg:hidden p-2 rounded-lg hover:text-primary hover:bg-muted transition-colors duration-200 ${textColorClass}`}
-            aria-label="Toggle menu"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              {open ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
+          {/* Theme Toggle (always visible) + Mobile Menu Button */}
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button
+              onClick={() => setOpen(!open)}
+              className={`lg:hidden p-2 rounded-lg hover:text-primary hover:bg-muted transition-colors duration-200 ${textColorClass}`}
+              aria-label="Toggle menu"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {open ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
@@ -176,7 +175,7 @@ export default function Navbar() {
                   {item.label}
                 </Link>
               ))}
-              
+
               {/* Mobile Company Dropdown */}
               <div>
                 <button
@@ -184,10 +183,10 @@ export default function Navbar() {
                   className={`flex items-center justify-between w-full px-3 py-2 text-base font-medium hover:text-primary hover:bg-muted rounded-lg transition-colors duration-200 ${textColorClass}`}
                 >
                   <span>Company</span>
-                  <motion.svg 
-                    className="w-5 h-5" 
-                    fill="none" 
-                    stroke="currentColor" 
+                  <motion.svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
                     viewBox="0 0 24 24"
                     animate={{ rotate: mobileCompanyOpen ? 180 : 0 }}
                     transition={{ duration: 0.2 }}
@@ -195,7 +194,7 @@ export default function Navbar() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </motion.svg>
                 </button>
-                
+
                 <AnimatePresence>
                   {mobileCompanyOpen && (
                     <motion.div
@@ -232,10 +231,6 @@ export default function Navbar() {
               >
                 Contact
               </Link>
-              
-              <div className="pt-3 flex justify-end">
-                <ThemeToggle />
-              </div>
             </div>
           </div>
         )}
