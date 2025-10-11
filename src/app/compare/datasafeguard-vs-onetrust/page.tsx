@@ -380,7 +380,7 @@ export default function DataSafeguardVsOneTrustPage() {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            Schedule a personalized demo and see how DataSafeguard's AI-powered platform 
+            Schedule a personalized demo and see how DataSafeguard’s AI-powered platform 
             can transform your data privacy program
           </motion.p>
           <motion.div

@@ -32,7 +32,7 @@ const nextConfig: NextConfig = {
   },
 
   // Performance optimizations
-  swcMinify: true,
+  // swcMinify is deprecated/invalid in Next.js 15; minification is handled automatically
   
   // Compression
   compress: true,

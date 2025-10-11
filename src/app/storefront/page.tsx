@@ -237,7 +237,7 @@ export default function StorefrontPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            {stats.map((stat, i) => (
+            {stats.map((stat) => (
               <motion.div
                 key={stat.label}
                 className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 text-center"
@@ -340,7 +340,7 @@ export default function StorefrontPage() {
 
                 {/* Features */}
                 <div className="space-y-2 mb-6">
-                  {solution.features.map((feature, j) => (
+                  {solution.features.map((feature) => (
                     <div key={feature} className="flex items-center gap-2 text-sm">
                       <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
                       <span>{feature}</span>

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
@@ -554,7 +553,7 @@ export default function ProductOfferingPage() {
                 <p className="text-muted-foreground mb-6">{option.description}</p>
 
                 <ul className="space-y-3">
-                  {option.features.map((feature, j) => (
+                  {option.features.map((feature) => (
                     <li key={feature} className="flex items-center gap-2 text-sm">
                       <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
                       <span>{feature}</span>

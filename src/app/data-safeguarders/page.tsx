@@ -273,7 +273,7 @@ export default function DataSafeguardersPage() {
               { value: "5", label: "Founding Members" },
               { value: "50+", label: "Years Combined Experience" },
               { value: "500+", label: "Clients Protected" },
-            ].map((stat, i) => (
+            ].map((stat) => (
               <motion.div
                 key={stat.label}
                 className="text-center"

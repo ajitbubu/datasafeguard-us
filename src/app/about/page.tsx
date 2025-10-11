@@ -99,7 +99,7 @@ export default function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            {stats.map((stat, i) => (
+            {stats.map((stat) => (
               <motion.div
                 key={stat.label}
                 className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 text-center"

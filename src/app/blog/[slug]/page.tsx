@@ -4,7 +4,17 @@ import { notFound } from "next/navigation";
 import BlogPost from "@/components/BlogPost";
 
 // This would normally come from a CMS or database
-const blogPosts: Record<string, any> = {
+type Author = { name: string; role: string };
+type BlogPostMeta = {
+    title: string;
+    excerpt: string;
+    category: string;
+    date: string;
+    readTime: string;
+    author: Author;
+};
+
+const blogPosts: Record<string, BlogPostMeta> = {
     "complete-guide-gdpr-compliance-2024": {
         title: "Complete Guide to GDPR Compliance in 2024",
         excerpt: "Everything you need to know about GDPR compliance, from data mapping to subject rights management. A comprehensive guide for enterprises.",
@@ -95,7 +105,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                     <p className="font-semibold mb-2">💡 Pro Tip:</p>
                     <p className="text-muted-foreground">
                         This is where you would add helpful tips, warnings, or additional context
-                        to enhance the reader's understanding.
+                        to enhance the reader’s understanding.
                     </p>
                 </div>
             </div>

@@ -12,39 +12,43 @@ export default function PerformanceMonitor() {
       // Largest Contentful Paint (LCP)
       const lcpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
-        const lastEntry = entries[entries.length - 1] as any;
+        const lastEntry = entries[entries.length - 1] as PerformanceEntry & {
+          renderTime?: number;
+          loadTime?: number;
+        };
         
         // Log to analytics (replace with your analytics service)
         console.log("LCP:", lastEntry.renderTime || lastEntry.loadTime);
         
         // Send to analytics
         if (window.gtag) {
-          window.gtag("event", "web_vitals", {
-            event_category: "Web Vitals",
-            event_label: "LCP",
-            value: Math.round(lastEntry.renderTime || lastEntry.loadTime),
-            non_interaction: true,
-          });
+            window.gtag("event", "web_vitals", {
+              event_category: "Web Vitals",
+              event_label: "LCP",
+              value: Math.round((lastEntry.renderTime ?? lastEntry.loadTime ?? 0)),
+              non_interaction: true,
+            });
         }
       });
 
       try {
         lcpObserver.observe({ type: "largest-contentful-paint", buffered: true });
-      } catch (e) {
+      } catch {
         // LCP not supported
       }
 
       // First Input Delay (FID)
       const fidObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
-        entries.forEach((entry: any) => {
-          console.log("FID:", entry.processingStart - entry.startTime);
+        entries.forEach((entry) => {
+          const timing = entry as PerformanceEventTiming;
+          console.log("FID:", timing.processingStart - timing.startTime);
           
           if (window.gtag) {
             window.gtag("event", "web_vitals", {
               event_category: "Web Vitals",
               event_label: "FID",
-              value: Math.round(entry.processingStart - entry.startTime),
+              value: Math.round(timing.processingStart - timing.startTime),
               non_interaction: true,
             });
           }
@@ -53,7 +57,7 @@ export default function PerformanceMonitor() {
 
       try {
         fidObserver.observe({ type: "first-input", buffered: true });
-      } catch (e) {
+      } catch {
         // FID not supported
       }
 
@@ -61,9 +65,13 @@ export default function PerformanceMonitor() {
       let clsValue = 0;
       const clsObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
-        entries.forEach((entry: any) => {
-          if (!entry.hadRecentInput) {
-            clsValue += entry.value;
+        entries.forEach((entry) => {
+          const shift = entry as PerformanceEntry & {
+            value?: number;
+            hadRecentInput?: boolean;
+          };
+          if (!shift.hadRecentInput) {
+            clsValue += (shift.value ?? 0);
           }
         });
         
@@ -81,7 +89,7 @@ export default function PerformanceMonitor() {
 
       try {
         clsObserver.observe({ type: "layout-shift", buffered: true });
-      } catch (e) {
+      } catch {
         // CLS not supported
       }
 
@@ -100,6 +108,6 @@ export default function PerformanceMonitor() {
 // Extend Window interface for TypeScript
 declare global {
   interface Window {
-    gtag?: (...args: any[]) => void;
+    gtag?: (...args: unknown[]) => void;
   }
 }

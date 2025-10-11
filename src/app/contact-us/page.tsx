@@ -240,7 +240,7 @@ export default function ContactUsPage() {
               { icon: "⚡", value: "< 1hr", label: "Response Time" },
               { icon: "🌍", value: "24/7", label: "Global Support" },
               { icon: "✓", value: "98%", label: "Satisfaction Rate" },
-            ].map((stat, i) => (
+            ].map((stat) => (
               <motion.div
                 key={stat.label}
                 className="text-center"
