@@ -593,7 +593,7 @@ export default function ContactUsPage() {
                   >
                     <option value="">Select a subject</option>
                     <option value="General Inquiry">General Inquiry</option>
-                    <option value="Security Consultation">Security Consultation</option>
+                    <option value="Privacy Consultation">Privacy Consultation</option>
                     <option value="Partnership Opportunity">Partnership Opportunity</option>
                     <option value="Technical Support">Technical Support</option>
                     <option value="Compliance Question">Compliance Question</option>
@@ -627,7 +627,7 @@ export default function ContactUsPage() {
                     aria-invalid={Boolean(errors.message) || undefined}
                     aria-describedby={errors.message ? "message-error" : undefined}
                     className={`w-full px-4 py-3 border rounded-xl bg-background focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none ${errors.message ? "border-red-500" : "border-border"}`}
-                    placeholder="Tell us about your data security needs..."
+                    placeholder="Tell us about your data privacy needs..."
                   />
                   {errors.message && (
                     <motion.p
@@ -762,7 +762,7 @@ export default function ContactUsPage() {
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              Security Emergency?
+              Privacy Emergency?
             </motion.h2>
             
             <motion.p
@@ -772,7 +772,7 @@ export default function ContactUsPage() {
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
             >
-              For urgent security incidents or data breaches, contact our emergency response team immediately. We&apos;re available 24/7 for critical situations.
+              For urgent privacy incidents or data breaches, contact our emergency response team immediately. We&apos;re available 24/7 for critical situations.
             </motion.p>
             
             <motion.div

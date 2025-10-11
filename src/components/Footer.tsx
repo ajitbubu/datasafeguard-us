@@ -23,7 +23,7 @@ export default function Footer() {
   const footerLinks = [
     { href: "/privacy", label: "Privacy Policy" },
     { href: "/terms", label: "Terms of Service" },
-    { href: "/security", label: "Security" },
+    { href: "/privacy-policy", label: "Privacy" },
     { href: "/compliance", label: "Compliance" },
   ];
 
@@ -56,7 +56,7 @@ export default function Footer() {
               )}
             </div>
             <p className="text-muted-foreground mb-4 max-w-md">
-              Enterprise-grade data protection solutions ensuring compliance, security, and peace of mind for your organization.
+              Enterprise-grade data protection solutions ensuring compliance, privacy, and peace of mind for your organization.
             </p>
             <div className="flex space-x-4">
               {socialLinks.map((social) => (
@@ -118,7 +118,7 @@ export default function Footer() {
             © {currentYear} DataSafeguard. All rights reserved.
           </p>
           <p className="text-sm text-muted-foreground mt-2 sm:mt-0">
-            Enterprise data security and compliance solutions.
+            Enterprise data privacy and compliance solutions.
           </p>
         </div>
       </div>

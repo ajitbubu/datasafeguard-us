@@ -259,7 +259,7 @@ export default function DataSafeguardersPage() {
             transition={{ delay: 0.2, duration: 0.6 }}
           >
             Meet the dedicated experts behind our comprehensive data protection and compliance solutions.
-            Our team combines decades of experience in cybersecurity, privacy engineering, and regulatory compliance.
+            Our team combines decades of experience in data privacy, privacy engineering, and regulatory compliance.
           </motion.p>
 
           {/* Stats */}
@@ -404,7 +404,7 @@ export default function DataSafeguardersPage() {
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              Join Our Security Team
+              Join Our Privacy Team
             </motion.h2>
 
             <motion.p
@@ -414,7 +414,7 @@ export default function DataSafeguardersPage() {
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
             >
-              We&apos;re always looking for talented security professionals to join our mission of protecting data worldwide.
+              We&apos;re always looking for talented privacy professionals to join our mission of protecting data worldwide.
             </motion.p>
 
             <motion.div

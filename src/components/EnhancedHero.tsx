@@ -122,10 +122,10 @@ export default function EnhancedHero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.8 }}
               >
-                Secure Your Data with{" "}
+                AI Data Privacy & Governance Platform for{" "}
                 <span className="relative inline-block">
                   <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent drop-shadow-2xl">
-                    AI-Powered Privacy
+                    Enterprise Compliance
                   </span>
                   <motion.span
                     className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-purple-400 shadow-lg shadow-blue-500/50"
@@ -144,9 +144,8 @@ export default function EnhancedHero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
               >
-                Enterprise-grade data protection powered by advanced AI.
-                Real-time threat detection, automated compliance, and
-                <span className="text-cyan-300 font-bold"> 99.9% uptime guarantee</span>.
+                Automate GDPR, CCPA, and HIPAA compliance with AI-powered data discovery, classification, and protection.
+                <span className="text-cyan-300 font-bold"> 94.5% detection accuracy</span> and real-time policy enforcement.
               </motion.p>
 
               {/* Feature Pills */}

@@ -19,8 +19,8 @@ export default function AboutPage() {
     },
     {
       icon: "🔒",
-      title: "Security First",
-      description: "Enterprise-grade security with zero-trust architecture and end-to-end encryption."
+      title: "Privacy First",
+      description: "Enterprise-grade privacy protection with zero-trust architecture and end-to-end encryption."
     },
     {
       icon: "🤝",
@@ -36,7 +36,7 @@ export default function AboutPage() {
 
   const milestones = [
     { year: "2021", title: "Company Founded", description: "DataSafeguard established with a vision to revolutionize data privacy" },
-    { year: "2022", title: "SOC 2 Certification", description: "Achieved SOC 2 Type II certification for security and compliance" },
+    { year: "2022", title: "SOC 2 Certification", description: "Achieved SOC 2 Type II certification for privacy and compliance" },
     { year: "2023", title: "500+ Clients", description: "Reached milestone of protecting data for 500+ enterprise clients" },
     { year: "2024", title: "AI Innovation", description: "Launched advanced AI-powered detection with 94.5% accuracy" },
   ];
@@ -138,7 +138,7 @@ export default function AboutPage() {
                 Founded in 2021, DataSafeguard emerged from a critical need in the market: organizations struggling to protect sensitive personal information while maintaining compliance with evolving data privacy regulations.
               </p>
               <p className="text-muted-foreground leading-relaxed mb-6">
-                Our founders, with decades of combined experience in cybersecurity and data privacy, recognized that traditional approaches were no longer sufficient. They envisioned a solution that would leverage artificial intelligence and machine learning to automatically detect, classify, and protect sensitive data at scale.
+                Our founders, with decades of combined experience in data privacy and protection, recognized that traditional approaches were no longer sufficient. They envisioned a solution that would leverage artificial intelligence and machine learning to automatically detect, classify, and protect sensitive data at scale.
               </p>
               <p className="text-muted-foreground leading-relaxed">
                 Today, DataSafeguard serves over 500 enterprise clients worldwide, processing millions of records per hour with industry-leading 94.5% accuracy. We continue to innovate and expand our capabilities to meet the evolving challenges of data privacy and security.

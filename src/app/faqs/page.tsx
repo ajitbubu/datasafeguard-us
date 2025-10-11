@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import Link from "next/link";
+import FAQSchema from "@/components/FAQSchema";
 
 export default function FAQsPage() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -49,7 +50,7 @@ export default function FAQsPage() {
       ]
     },
     {
-      category: "Security & Compliance",
+      category: "Privacy & Compliance",
       icon: "🔒",
       faqs: [
         {
@@ -108,8 +109,12 @@ export default function FAQsPage() {
     },
   ];
 
+  // Flatten all FAQs for schema
+  const allFAQs = faqCategories.flatMap(category => category.faqs);
+
   return (
     <div className="min-h-screen">
+      <FAQSchema faqs={allFAQs} />
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950/40 to-slate-900 py-20 md:py-32">
         <div className="absolute inset-0">

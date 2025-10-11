@@ -12,7 +12,7 @@ export default function ProductOfferingPage() {
     {
       id: "data-privacy",
       title: "Data Privacy & Protection",
-      icon: "🔒",
+      iconPath: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z",
       tagline: "Intelligent PII Detection & Redaction",
       description: "Automatically detect, identify, and redact sensitive personal information across all your data systems with industry-leading accuracy.",
       features: [
@@ -33,7 +33,7 @@ export default function ProductOfferingPage() {
     {
       id: "fraud-prevention",
       title: "Fraud Prevention",
-      icon: "🛡️",
+      iconPath: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z",
       tagline: "AI-Powered Synthetic Identity Detection",
       description: "Prevent synthetic fraud and protect real customers from impersonation using advanced machine learning models.",
       features: [
@@ -54,7 +54,7 @@ export default function ProductOfferingPage() {
     {
       id: "compliance",
       title: "Compliance Automation",
-      icon: "✓",
+      iconPath: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z",
       tagline: "Framework-Based Rules Engine",
       description: "Automate compliance workflows with our intelligent rules engine that adapts to GDPR, HIPAA, CCPA, and other regulatory frameworks.",
       features: [
@@ -78,32 +78,32 @@ export default function ProductOfferingPage() {
     {
       title: "Detect, Identify, Confirm, Redact PII",
       description: "Advanced AI models for comprehensive PII detection",
-      icon: "🔍"
+      iconPath: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
     },
     {
       title: "No 3rd Party Data Processing",
       description: "Your data never leaves your infrastructure",
-      icon: "🔐"
+      iconPath: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
     },
     {
       title: "Custom AI/ML Models",
       description: "Proprietary algorithms built for accuracy",
-      icon: "🤖"
+      iconPath: "M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
     },
     {
       title: "Flexible Deployment",
       description: "On-premises, cloud, or hybrid options",
-      icon: "☁️"
+      iconPath: "M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
     },
     {
       title: "Minimal Maintenance",
       description: "Automated updates and self-healing systems",
-      icon: "⚙️"
+      iconPath: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
     },
     {
       title: "Real-time Processing",
       description: "HPC-powered data accelerator for instant results",
-      icon: "⚡"
+      iconPath: "M13 10V3L4 14h7v7l9-11h-7z"
     }
   ];
 
@@ -142,19 +142,19 @@ export default function ProductOfferingPage() {
     {
       title: "On-Premises",
       description: "Full control with deployment in your data center",
-      icon: "🏢",
+      iconPath: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4",
       features: ["Complete data sovereignty", "Custom hardware integration", "Air-gapped deployment", "Dedicated support"]
     },
     {
       title: "Cloud",
       description: "Scalable deployment on AWS, Azure, or GCP",
-      icon: "☁️",
+      iconPath: "M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z",
       features: ["Auto-scaling", "Global availability", "Managed infrastructure", "Pay-as-you-grow"]
     },
     {
       title: "Hybrid",
       description: "Best of both worlds with flexible architecture",
-      icon: "🔄",
+      iconPath: "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15",
       features: ["Distributed processing", "Data residency compliance", "Seamless integration", "Unified management"]
     }
   ];
@@ -258,10 +258,10 @@ export default function ProductOfferingPage() {
               <div className="relative bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-3xl p-8 backdrop-blur-sm">
                 <div className="grid grid-cols-2 gap-4">
                   {[
-                    { label: "Detection Rate", value: "94.5%", icon: "🎯" },
-                    { label: "Processing Speed", value: "10M+/hr", icon: "⚡" },
-                    { label: "Compliance", value: "100%", icon: "✓" },
-                    { label: "Uptime", value: "99.9%", icon: "🔒" }
+                    { label: "Detection Rate", value: "94.5%", iconPath: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" },
+                    { label: "Processing Speed", value: "10M+/hr", iconPath: "M13 10V3L4 14h7v7l9-11h-7z" },
+                    { label: "Compliance", value: "100%", iconPath: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" },
+                    { label: "Uptime", value: "99.9%", iconPath: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" }
                   ].map((stat, i) => (
                     <motion.div
                       key={stat.label}
@@ -271,7 +271,13 @@ export default function ProductOfferingPage() {
                       transition={{ delay: 0.4 + i * 0.1 }}
                       whileHover={{ scale: 1.05, backgroundColor: "rgba(255, 255, 255, 0.1)" }}
                     >
-                      <div className="text-3xl mb-2">{stat.icon}</div>
+                      <div className="flex justify-center mb-2">
+                        <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-lg flex items-center justify-center">
+                          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={stat.iconPath} />
+                          </svg>
+                        </div>
+                      </div>
                       <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
                       <div className="text-xs text-gray-300">{stat.label}</div>
                     </motion.div>
@@ -312,7 +318,13 @@ export default function ProductOfferingPage() {
               transition={{ delay: i * 0.1 }}
               whileHover={{ y: -8, boxShadow: "0 20px 40px rgba(59, 130, 246, 0.2)" }}
             >
-              <div className="text-4xl mb-4">{feature.icon}</div>
+              <div className="mb-4">
+                <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200">
+                  <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={feature.iconPath} />
+                  </svg>
+                </div>
+              </div>
               <h3 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors">
                 {feature.title}
               </h3>
@@ -347,7 +359,7 @@ export default function ProductOfferingPage() {
               <motion.button
                 key={solution.id}
                 onClick={() => setActiveTab(solution.id)}
-                className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${activeTab === solution.id
+                className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 ${activeTab === solution.id
                   ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/50"
                   : "bg-card border border-border hover:border-primary/50"
                   }`}
@@ -357,7 +369,11 @@ export default function ProductOfferingPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
               >
-                <span className="mr-2">{solution.icon}</span>
+                <div className={`w-6 h-6 rounded flex items-center justify-center ${activeTab === solution.id ? 'bg-white/20' : 'bg-primary/10'}`}>
+                  <svg className={`w-4 h-4 ${activeTab === solution.id ? 'text-white' : 'text-primary'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={solution.iconPath} />
+                  </svg>
+                </div>
                 {solution.title}
               </motion.button>
             ))}
@@ -374,7 +390,13 @@ export default function ProductOfferingPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* Left: Description */}
               <div>
-                <div className="text-5xl mb-4">{activeSolution.icon}</div>
+                <div className="mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={activeSolution.iconPath} />
+                    </svg>
+                  </div>
+                </div>
                 <h3 className="text-3xl font-bold mb-3">{activeSolution.title}</h3>
                 <p className="text-primary font-semibold mb-4">{activeSolution.tagline}</p>
                 <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
@@ -521,7 +543,13 @@ export default function ProductOfferingPage() {
                 transition={{ delay: i * 0.1 }}
                 whileHover={{ y: -8, boxShadow: "0 20px 40px rgba(59, 130, 246, 0.2)" }}
               >
-                <div className="text-5xl mb-4">{option.icon}</div>
+                <div className="mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={option.iconPath} />
+                    </svg>
+                  </div>
+                </div>
                 <h3 className="text-2xl font-bold mb-3">{option.title}</h3>
                 <p className="text-muted-foreground mb-6">{option.description}</p>
 
