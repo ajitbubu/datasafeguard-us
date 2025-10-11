@@ -1,8 +1,24 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { useTheme } from "./ThemeProvider";
+import { useEffect, useState } from "react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Avoid hydration mismatch by only rendering theme-dependent content after mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Determine which logo to use based on theme
+  const logoSrc = mounted && resolvedTheme === "dark" 
+    ? "/brand-logo-white.svg" 
+    : "/brand-logo.svg";
   
   const footerLinks = [
     { href: "/privacy", label: "Privacy Policy" },
@@ -25,13 +41,19 @@ export default function Footer() {
           {/* Company Info */}
           <div className="md:col-span-2">
             <div className="flex items-center mb-4">
-              <Image 
-                src="/brand-logo.svg" 
-                alt="DataSafeguard Logo" 
-                width={120}
-                height={48}
-                className="h-12 w-auto"
-              />
+              {mounted ? (
+                <Image 
+                  src={logoSrc}
+                  alt="DataSafeguard Logo" 
+                  width={120}
+                  height={48}
+                  className="h-12 w-auto"
+                  priority
+                />
+              ) : (
+                // Placeholder to prevent layout shift
+                <div className="h-12 w-[120px]" />
+              )}
             </div>
             <p className="text-muted-foreground mb-4 max-w-md">
               Enterprise-grade data protection solutions ensuring compliance, security, and peace of mind for your organization.

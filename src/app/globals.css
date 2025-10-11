@@ -1,13 +1,22 @@
 @import "tailwindcss";
 
 :root {
+  /* Corporate Light Theme - Professional & Trustworthy */
   --background: #ffffff;
   --foreground: #0f172a;
   --muted: #f8fafc;
   --muted-foreground: #64748b;
   --border: #e2e8f0;
-  --primary: #1a77f2;
+  --primary: #1a77f2;        /* DataSafeguard Blue - Trust & Security */
+  --secondary: #22c55e;      /* Success Green - Protection & Compliance */
+  --accent: #8b5cf6;         /* Purple - Innovation & AI */
   --primary-foreground: #ffffff;
+  
+  /* Corporate Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
 }
 
 @theme inline {
@@ -48,13 +57,22 @@ html[data-theme="light"] {
 }
 
 html[data-theme="dark"] {
-  --background: #020617; /* slate-950 */
-  --foreground: #f8fafc; /* slate-50 */
-  --muted: #0f172a;      /* slate-900 */
-  --muted-foreground: #94a3b8; /* slate-400 */
-  --border: #334155;     /* slate-700 */
-  --primary: #1a77f2;
+  /* Corporate Dark Theme - Professional & Modern */
+  --background: #020617;     /* Deep slate for premium feel */
+  --foreground: #f8fafc;     /* Crisp white text */
+  --muted: #0f172a;          /* Subtle backgrounds */
+  --muted-foreground: #94a3b8; /* Muted text */
+  --border: #334155;         /* Defined borders */
+  --primary: #3b82f6;        /* Brighter blue for dark mode */
+  --secondary: #22c55e;      /* Success green */
+  --accent: #a78bfa;         /* Lighter purple for dark mode */
   --primary-foreground: #ffffff;
+  
+  /* Enhanced shadows for dark mode */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.6);
 }
 
 * {
@@ -67,7 +85,32 @@ body {
   font-feature-settings: "rlig" 1, "calt" 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease;
+  
+  /* Corporate typography settings */
+  font-size: 16px;
+  line-height: 1.6;
+  letter-spacing: -0.011em;
+}
+
+/* Corporate heading styles */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 4rem);
+}
+
+h2 {
+  font-size: clamp(1.75rem, 4vw, 3rem);
+}
+
+h3 {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
 }
 
 /* Scrollbar styling */
@@ -100,7 +143,9 @@ body {
   outline-offset: 2px;
 }
 
-/* Utility classes */
+/* Corporate Utility Classes */
+
+/* Text Gradients - Professional & Eye-catching */
 .text-gradient {
   background: linear-gradient(135deg, #1a77f2 0%, #0e4997 50%, #0a3a7a 100%);
   -webkit-background-clip: text;
@@ -108,6 +153,21 @@ body {
   background-clip: text;
 }
 
+.text-gradient-success {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 50%, #15803d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-ai {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Background Gradients - Corporate & Professional */
 .bg-gradient-primary {
   background: linear-gradient(135deg, #1a77f2 0%, #0e4997 50%, #0a3a7a 100%);
 }
@@ -116,31 +176,82 @@ body {
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
 }
 
+.bg-gradient-cta {
+  background: linear-gradient(135deg, #1a77f2 0%, #0e4997 100%);
+}
+
+.bg-gradient-hero {
+  background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e293b 100%);
+}
+
 .bg-hero-pattern {
   background-image: radial-gradient(circle at 25% 25%, rgba(26, 119, 242, 0.1) 0%, transparent 50%), 
                     radial-gradient(circle at 75% 75%, rgba(34, 197, 94, 0.1) 0%, transparent 50%);
 }
 
-/* Card component styles */
+/* Corporate Glass Effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Professional Shadows */
+.shadow-corporate {
+  box-shadow: 0 4px 20px rgba(26, 119, 242, 0.15);
+}
+
+.shadow-corporate-lg {
+  box-shadow: 0 10px 40px rgba(26, 119, 242, 0.2);
+}
+
+/* Corporate Card Styles */
 .card {
-  @apply bg-background border border-border rounded-lg p-6 shadow-lg;
+  @apply bg-background border border-border rounded-xl p-6 shadow-md;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card-hover {
-  @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-2;
 }
 
-/* Button component styles */
+.card-corporate {
+  @apply bg-background border border-border rounded-2xl p-8 shadow-lg;
+  background: linear-gradient(to bottom, var(--background), var(--muted));
+}
+
+.card-feature {
+  @apply bg-background border border-border rounded-2xl p-6;
+  transition: all 0.3s ease;
+}
+
+.card-feature:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(26, 119, 242, 0.2);
+  border-color: var(--primary);
+}
+
+/* Corporate Button Styles */
 .btn-primary {
-  @apply bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-6 py-3 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md;
+  @apply bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-3 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg;
+  transform: translateY(0);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
 }
 
 .btn-secondary {
-  @apply bg-muted hover:bg-muted/80 text-foreground font-medium px-6 py-3 rounded-lg transition-all duration-200 border border-border;
+  @apply bg-muted hover:bg-muted/80 text-foreground font-semibold px-8 py-3 rounded-xl transition-all duration-300 border border-border hover:border-primary;
 }
 
 .btn-outline {
-  @apply border border-primary text-primary hover:bg-primary hover:text-primary-foreground font-medium px-6 py-3 rounded-lg transition-all duration-200;
+  @apply border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold px-8 py-3 rounded-xl transition-all duration-300;
+}
+
+.btn-ghost {
+  @apply text-foreground hover:bg-muted font-medium px-6 py-2 rounded-lg transition-all duration-200;
 }
 
 /* CTA Button styles with specific colors */
@@ -199,5 +310,209 @@ body {
   to { 
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Corporate Section Spacing */
+.section-padding {
+  @apply py-20 md:py-32;
+}
+
+.section-padding-sm {
+  @apply py-12 md:py-16;
+}
+
+.container-corporate {
+  @apply container mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Professional Hover Effects */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.hover-glow {
+  transition: box-shadow 0.3s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 30px rgba(26, 119, 242, 0.4);
+}
+
+/* Corporate Badge Styles */
+.badge {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+}
+
+.badge-primary {
+  @apply bg-primary/10 text-primary border border-primary/20;
+}
+
+.badge-success {
+  @apply bg-green-500/10 text-green-600 border border-green-500/20;
+}
+
+.badge-warning {
+  @apply bg-yellow-500/10 text-yellow-600 border border-yellow-500/20;
+}
+
+/* Professional Link Styles */
+.link-corporate {
+  @apply text-primary hover:text-primary/80 font-medium transition-colors duration-200;
+  text-decoration: none;
+  position: relative;
+}
+
+.link-corporate::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--primary);
+  transition: width 0.3s ease;
+}
+
+.link-corporate:hover::after {
+  width: 100%;
+}
+
+/* Corporate Divider */
+.divider-corporate {
+  @apply border-t border-border my-8;
+}
+
+/* Professional Input Styles */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+textarea,
+select {
+  @apply w-full px-4 py-3 border border-border rounded-xl bg-background;
+  @apply focus:ring-2 focus:ring-primary focus:border-transparent;
+  @apply transition-all duration-200;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(26, 119, 242, 0.1);
+}
+
+/* Corporate Stats Display */
+.stat-card {
+  @apply text-center p-6 rounded-xl bg-gradient-to-br from-background to-muted;
+  @apply border border-border transition-all duration-300;
+}
+
+.stat-card:hover {
+  @apply border-primary shadow-lg;
+  transform: translateY(-4px);
+}
+
+.stat-value {
+  @apply text-4xl font-bold text-primary mb-2;
+}
+
+.stat-label {
+  @apply text-sm text-muted-foreground uppercase tracking-wider;
+}
+
+/* Professional Loading States */
+.skeleton {
+  @apply animate-pulse bg-muted rounded;
+}
+
+/* Corporate Alert Styles */
+.alert {
+  @apply p-4 rounded-xl border;
+}
+
+.alert-info {
+  @apply bg-blue-50 border-blue-200 text-blue-800;
+}
+
+.alert-success {
+  @apply bg-green-50 border-green-200 text-green-800;
+}
+
+.alert-warning {
+  @apply bg-yellow-50 border-yellow-200 text-yellow-800;
+}
+
+.alert-error {
+  @apply bg-red-50 border-red-200 text-red-800;
+}
+
+/* Dark mode alert adjustments */
+html[data-theme="dark"] .alert-info {
+  @apply bg-blue-950/50 border-blue-800 text-blue-200;
+}
+
+html[data-theme="dark"] .alert-success {
+  @apply bg-green-950/50 border-green-800 text-green-200;
+}
+
+html[data-theme="dark"] .alert-warning {
+  @apply bg-yellow-950/50 border-yellow-800 text-yellow-200;
+}
+
+html[data-theme="dark"] .alert-error {
+  @apply bg-red-950/50 border-red-800 text-red-200;
+}
+
+/* Professional Testimonial/Quote Styles */
+.quote-corporate {
+  @apply border-l-4 border-primary pl-6 py-4 italic text-lg;
+}
+
+/* Corporate Feature List */
+.feature-list {
+  @apply space-y-3;
+}
+
+.feature-list-item {
+  @apply flex items-start gap-3;
+}
+
+.feature-list-item::before {
+  content: '✓';
+  @apply flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white;
+  @apply flex items-center justify-center text-sm font-bold;
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+  
+  h1 {
+    font-size: clamp(1.75rem, 8vw, 2.5rem);
+  }
+  
+  h2 {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+}
+
+/* Print Styles for Corporate Documents */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  
+  .no-print {
+    display: none !important;
   }
 }
