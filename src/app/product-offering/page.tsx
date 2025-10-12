@@ -3,6 +3,264 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
+import React from "react";
+
+// Orbit Component - Inline
+function computeDelay(idx: number, total: number, speed: number): string {
+  if (total <= 0 || speed <= 0) return '0s';
+  const step = speed / total;
+  const val = (idx * step) % speed;
+  return `${val}s`;
+}
+
+function IntegrationOrbit() {
+  const [paused, setPaused] = useState(false);
+
+  const orbitGroups = [
+    {
+      radius: 150,
+      speed: 40,
+      logos: [
+        { src: 'https://cdn.simpleicons.org/amazonaws/FF9900', alt: 'AWS' },
+        { src: 'https://cdn.simpleicons.org/microsoftazure/0078D4', alt: 'Azure' },
+        { src: 'https://cdn.simpleicons.org/googlecloud/4285F4', alt: 'Google Cloud' },
+        { src: 'https://cdn.simpleicons.org/snowflake/29B5E8', alt: 'Snowflake' }
+      ]
+    },
+    {
+      radius: 220,
+      speed: 60,
+      logos: [
+        { src: 'https://cdn.simpleicons.org/slack/4A154B', alt: 'Slack' },
+        { src: 'https://cdn.simpleicons.org/github/181717', alt: 'GitHub' },
+        { src: 'https://cdn.simpleicons.org/notion/000000', alt: 'Notion' },
+        { src: 'https://cdn.simpleicons.org/asana/F06A6A', alt: 'Asana' },
+        { src: 'https://cdn.simpleicons.org/tableau/E97627', alt: 'Tableau' },
+        { src: 'https://cdn.simpleicons.org/salesforce/00A1E0', alt: 'Salesforce' }
+      ]
+    },
+    {
+      radius: 300,
+      speed: 80,
+      logos: [
+        { src: 'https://cdn.simpleicons.org/openai/412991', alt: 'OpenAI' },
+        { src: 'https://cdn.simpleicons.org/databricks/FF3621', alt: 'Databricks' },
+        { src: 'https://cdn.simpleicons.org/looker/4285F4', alt: 'Looker' },
+        { src: 'https://cdn.simpleicons.org/powerbi/F2C811', alt: 'Power BI' },
+        { src: 'https://cdn.simpleicons.org/postgresql/4169E1', alt: 'PostgreSQL' },
+        { src: 'https://cdn.simpleicons.org/mongodb/47A248', alt: 'MongoDB' },
+        { src: 'https://cdn.simpleicons.org/redis/DC382D', alt: 'Redis' },
+        { src: 'https://cdn.simpleicons.org/apachehadoop/66CCFF', alt: 'Hadoop' }
+      ]
+    },
+  ];
+
+  return (
+    <section
+      className="eoh-hero"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onTouchStart={() => setPaused(p => !p)}
+      suppressHydrationWarning
+    >
+      <div className="eoh-inner" suppressHydrationWarning>
+        <h2 className="eoh-title" suppressHydrationWarning>1000+ Pre-Built Integrations</h2>
+        <p className="eoh-subtitle" suppressHydrationWarning>
+          Seamlessly connect with your entire data ecosystem across cloud platforms, databases, SaaS applications, and enterprise tools.
+        </p>
+
+        <div className={`eoh-orbit-wrap ${paused ? 'paused' : ''}`} suppressHydrationWarning>
+          <div className="eoh-core" suppressHydrationWarning>DataSafeguard.ai</div>
+
+          {orbitGroups.map((orbit, oi) => (
+            <React.Fragment key={oi}>
+              <div className="eoh-orbit" style={{ width: orbit.radius * 2, height: orbit.radius * 2 }} />
+              {orbit.logos.map((logo, li) => (
+                <div
+                  key={`${oi}-${li}`}
+                  className="eoh-rot"
+                  style={{
+                    animation: `eoh-spin ${orbit.speed}s linear infinite`,
+                    animationDelay: computeDelay(li, orbit.logos.length, orbit.speed),
+                  }}
+                >
+                  <div
+                    className="eoh-logo-wrapper"
+                    style={{ transform: `translate(${orbit.radius}px, -50%)` }}
+                  >
+                    <div className="eoh-logo" title={logo.alt}>
+                      <img
+                        src={logo.src}
+                        alt={logo.alt}
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                        onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = '0.35'; }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </React.Fragment>
+          ))}
+        </div>
+
+        <div className="eoh-cta" suppressHydrationWarning>
+          <Link href="/storefront" className="eoh-btn eoh-btn--primary">
+            Explore Integrations
+          </Link>
+          <Link href="/contact-us" className="eoh-btn eoh-btn--ghost">
+            Book a Demo
+          </Link>
+        </div>
+      </div>
+
+      <style jsx global>{`
+        @keyframes eoh-spin { 
+          from { transform: translate(-50%, -50%) rotate(0deg); } 
+          to { transform: translate(-50%, -50%) rotate(360deg); } 
+        }
+      `}</style>
+
+      <style jsx>{`
+        .eoh-hero { 
+          position: relative; 
+          background: linear-gradient(to bottom, #f8fafc, #ffffff); 
+          color: #0f172a; 
+          overflow: hidden;
+          padding: 4rem 0;
+        }
+        .eoh-inner { 
+          max-width: 1120px; 
+          margin: 0 auto; 
+          padding: 0 1.25rem; 
+          text-align: center; 
+        }
+        .eoh-title { 
+          font-size: clamp(2rem, 3.6vw, 3rem); 
+          font-weight: 800; 
+          margin: 0 0 0.5rem; 
+        }
+        .eoh-subtitle { 
+          color: #475569; 
+          font-size: clamp(1rem, 1.4vw, 1.125rem); 
+          margin: 0 auto 2.5rem; 
+          max-width: 48rem; 
+        }
+        .eoh-orbit-wrap { 
+          position: relative; 
+          width: min(92vw, 700px); 
+          height: min(92vw, 700px); 
+          margin: 0 auto 2rem; 
+        }
+        .eoh-orbit-wrap.paused .eoh-rot { 
+          animation-play-state: paused !important; 
+        }
+        .eoh-core { 
+          position: absolute; 
+          top: 50%; 
+          left: 50%; 
+          transform: translate(-50%, -50%); 
+          width: 10rem; 
+          height: 10rem; 
+          background: linear-gradient(135deg, #0284c7, #2563eb); 
+          border-radius: 9999px; 
+          box-shadow: 0 8px 22px rgba(2,132,199,.28); 
+          color: #fff; 
+          display: grid; 
+          place-items: center; 
+          font-weight: 600; 
+          padding: 1rem; 
+          z-index: 1; 
+        }
+        .eoh-orbit { 
+          position: absolute; 
+          top: 50%; 
+          left: 50%; 
+          transform: translate(-50%, -50%); 
+          border: 1px solid rgba(56,189,248,.35); 
+          border-radius: 9999px; 
+          z-index: 0; 
+        }
+        .eoh-rot { 
+          position: absolute; 
+          top: 50%; 
+          left: 50%; 
+          width: 0; 
+          height: 0; 
+          z-index: 2; 
+        }
+        .eoh-logo-wrapper {
+          position: absolute;
+          top: 50%;
+          left: 0;
+          transform: translateY(-50%);
+        }
+        .eoh-logo { 
+          width: 56px; 
+          height: 56px; 
+          border-radius: 50%; 
+          background: #fff; 
+          padding: 12px; 
+          box-shadow: 0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04); 
+          display: inline-flex; 
+          align-items: center;
+          justify-content: center;
+          transition: transform 200ms ease, box-shadow 200ms ease;
+        }
+        .eoh-logo:hover { 
+          transform: scale(1.12); 
+          box-shadow: 0 8px 24px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.08);
+        }
+        .eoh-logo img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+        .eoh-cta { 
+          display: flex; 
+          gap: .75rem; 
+          justify-content: center; 
+          flex-wrap: wrap;
+        }
+        .eoh-btn { 
+          text-decoration: none; 
+          display: inline-flex; 
+          align-items: center; 
+          gap: .5rem; 
+          padding: .75rem 1.25rem; 
+          border-radius: 14px; 
+          font-weight: 600; 
+          transition: all 200ms ease;
+        }
+        .eoh-btn--primary { 
+          background: #0f172a; 
+          color: #fff; 
+          box-shadow: 0 6px 16px rgba(15, 23, 42, .25); 
+        }
+        .eoh-btn--primary:hover { 
+          filter: brightness(1.05); 
+          transform: translateY(-2px);
+        }
+        .eoh-btn--ghost { 
+          background: #fff; 
+          color: #0f172a; 
+          border: 1px solid #e2e8f0; 
+        }
+        .eoh-btn--ghost:hover { 
+          background: #f8fafc; 
+          transform: translateY(-2px);
+        }
+        @media (max-width: 640px) {
+          .eoh-core { width: 8rem; height: 8rem; font-size: .95rem; }
+          .eoh-logo { width: 48px; height: 48px; padding: 10px; }
+        }
+        @media (max-width: 390px) {
+          .eoh-core { width: 7rem; height: 7rem; font-size: .9rem; }
+          .eoh-logo { width: 40px; height: 40px; padding: 8px; }
+        }
+      `}</style>
+    </section>
+  );
+}
 
 export default function ProductOfferingPage() {
   const [activeTab, setActiveTab] = useState("data-privacy");
@@ -565,6 +823,9 @@ export default function ProductOfferingPage() {
           </div>
         </div>
       </section>
+
+      {/* Integration Orbit Section */}
+      <IntegrationOrbit />
 
       {/* CTA Section */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">

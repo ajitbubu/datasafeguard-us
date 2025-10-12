@@ -69,7 +69,7 @@ export default function Home() {
                 <div className="text-3xl sm:text-4xl font-bold text-primary mb-2">
                   {stat.value}
                 </div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
+                <div className="text-sm text-muted-foreground" suppressHydrationWarning>{stat.label}</div>
               </motion.div>
             ))}
           </div>

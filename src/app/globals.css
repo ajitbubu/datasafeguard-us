@@ -31,6 +31,8 @@
 
   /* Fonts */
   --font-sans: var(--font-inter);
+  --font-heading: var(--font-poppins);
+  --font-mono: var(--font-space-grotesk);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -96,6 +98,7 @@ body {
 
 /* Corporate heading styles */
 h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-poppins), var(--font-inter), sans-serif;
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.2;
