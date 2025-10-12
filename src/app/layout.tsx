@@ -8,6 +8,7 @@ import GoogleAnalytics from "../components/GoogleAnalytics";
 import StructuredData from "../components/StructuredData";
 import PerformanceMonitor from "../components/PerformanceMonitor";
 import ScrollToTop from "../components/ScrollToTop";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -86,6 +87,7 @@ export default function RootLayout({
           <Footer />
           <ScrollToTop />
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
