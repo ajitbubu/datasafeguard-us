@@ -4,7 +4,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import EnhancedHero from "@/components/EnhancedHero";
-import { useConsent } from "@/components/ConsentProvider";
 import { setCookie } from "@/lib/cookies";
 
 // Analytics Loader Component

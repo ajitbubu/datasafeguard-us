@@ -11,6 +11,8 @@ import PerformanceMonitor from "../components/PerformanceMonitor";
 import ScrollToTop from "../components/ScrollToTop";
 import { Analytics } from "@vercel/analytics/next";
 import { ConsentProvider } from "@/components/ConsentProvider";
+import ConsentBanner from "@/components/ConsentBanner";
+import IframeConsentManager from "@/components/IframeConsentManager";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -91,6 +93,8 @@ export default function RootLayout({
             </main>
             <Footer />
             <ScrollToTop />
+            <ConsentBanner />
+            <IframeConsentManager />
           </ThemeProvider>
         </ConsentProvider>
         <Analytics />

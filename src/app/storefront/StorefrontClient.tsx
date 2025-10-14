@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { useConsent } from "@/components/ConsentProvider";
 import { setCookie } from "@/lib/cookies";
 
 export default function StorefrontClient() {

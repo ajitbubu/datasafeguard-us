@@ -2,7 +2,7 @@
 
 declare global {
   interface Window {
-    dataLayer: any[];
+    dataLayer: Record<string, unknown>[];
   }
 }
 
@@ -11,7 +11,7 @@ declare global {
  * @param event - Event name
  * @param data - Additional event data
  */
-export const gtmPushEvent = (event: string, data?: Record<string, any>) => {
+export const gtmPushEvent = (event: string, data?: Record<string, unknown>) => {
   if (typeof window !== "undefined" && window.dataLayer) {
     window.dataLayer.push({
       event,
@@ -57,7 +57,7 @@ export const gtmCustomEvent = (
  * @param event - Ecommerce event name (e.g., 'add_to_cart', 'purchase')
  * @param data - Ecommerce data
  */
-export const gtmEcommerceEvent = (event: string, data: Record<string, any>) => {
+export const gtmEcommerceEvent = (event: string, data: Record<string, unknown>) => {
   gtmPushEvent(event, {
     ecommerce: data,
   });
@@ -68,7 +68,7 @@ export const gtmEcommerceEvent = (event: string, data: Record<string, any>) => {
  * @param userId - User ID
  * @param userData - Additional user data
  */
-export const gtmSetUser = (userId: string, userData?: Record<string, any>) => {
+export const gtmSetUser = (userId: string, userData?: Record<string, unknown>) => {
   if (typeof window !== "undefined" && window.dataLayer) {
     window.dataLayer.push({
       user_id: userId,
