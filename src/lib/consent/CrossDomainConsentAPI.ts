@@ -132,7 +132,11 @@ export class CrossDomainConsentAPI {
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to save consent: ${response.statusText}`);
+        // Return error instead of throwing to allow graceful degradation
+        return {
+          success: false,
+          error: `Failed to save consent: ${response.statusText}`
+        };
       }
 
       const result = await response.json();

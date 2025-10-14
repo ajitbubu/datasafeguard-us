@@ -43,21 +43,6 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
         const detectedJurisdiction = detectJurisdiction();
         setJurisdiction(detectedJurisdiction);
 
-        // First check localStorage for quick load
-        try {
-          const localConsent = localStorage.getItem('ds_consent');
-          if (localConsent) {
-            const parsed = JSON.parse(localConsent);
-            setConsentState(parsed);
-            setHasDecided(true);
-            console.log('[ConsentProvider] Consent loaded from localStorage');
-            setLoading(false);
-            return; // Exit early if we have local consent
-          }
-        } catch (error) {
-          console.error('[ConsentProvider] Error reading localStorage:', error);
-        }
-
         // Initialize API
         if (!consentAPIInstance) {
           consentAPIInstance = new CrossDomainConsentAPI({
@@ -69,7 +54,7 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
           });
         }
 
-        // Check for existing consent from API
+        // Check for existing consent
         const result: ConsentCheckResult = await consentAPIInstance.checkConsent();
         
         if (result.hasConsent && result.preferences) {
@@ -141,8 +126,9 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
     // Save to localStorage as fallback
     try {
       localStorage.setItem('ds_consent', JSON.stringify(newConsent));
+      console.log('[ConsentProvider] Consent saved to localStorage');
     } catch (error) {
-      console.error('[ConsentProvider] Failed to save to localStorage:', error);
+      console.warn('[ConsentProvider] Failed to save to localStorage:', error);
     }
 
     // Also try to save via API if available
@@ -150,17 +136,18 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
       try {
         const result = await consentAPIInstance.saveConsent(newConsent);
         if (result.success) {
-          console.log('[ConsentProvider] Consent saved successfully');
+          console.log('[ConsentProvider] Consent saved to API successfully');
           
           // Log domains where consent applies
           if (result.appliesTo) {
             console.log('[ConsentProvider] Consent applies to:', result.appliesTo);
           }
         } else {
-          console.error('[ConsentProvider] Failed to save consent:', result.error);
+          // Use warn instead of error since localStorage fallback is working
+          console.warn('[ConsentProvider] API save failed (using localStorage):', result.error);
         }
       } catch (error) {
-        console.error('[ConsentProvider] API error:', error);
+        console.warn('[ConsentProvider] API unavailable (using localStorage):', error);
       }
     }
   }, [consent]);

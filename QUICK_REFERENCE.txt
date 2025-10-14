@@ -1,0 +1,65 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                   CROSS-DOMAIN CONSENT - QUICK REFERENCE                  ║
+║                        React + Angular + Backend API                      ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+📁 PROJECT LOCATIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+React:     /Users/ajitsahu/Project/comcast/dsg-react
+Angular:   /Users/ajitsahu/Project/comcast/dsg-angular/datasafeguard-replica
+Backend:   /Users/ajitsahu/Project/comcast/dsg-react/server/consent-api
+
+🚀 START COMMANDS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Backend:   cd server/consent-api && npm run dev
+React:     npm run dev
+Angular:   npm start
+
+🌐 ACCESS URLS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+React:           http://localhost:3000
+Angular:         http://localhost:4200
+Backend API:     http://localhost:3001
+API Health:      http://localhost:3001/health
+API Stats:       http://localhost:3001/api/consent/stats
+
+🧪 TESTING FLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Open React site (localhost:3000)
+2. Accept consent
+3. Check: localStorage['ds_consent_v2'] ✅
+4. Check: Cookie 'consent_user_id' ✅
+5. Open Angular site (localhost:4200)
+6. Banner should NOT appear ✅
+7. Both sites synced! 🎉
+
+🔍 DEBUGGING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Browser Console:
+  - React:   Look for [ConsentProvider] logs
+  - Angular: Look for [ConsentService] logs
+  
+Backend Logs:
+  - Look for [AUDIT] entries
+  
+Storage:
+  - localStorage.getItem('ds_consent_v2')
+  - document.cookie
+  
+Network:
+  - Check calls to /api/consent/*
+  - Verify withCredentials: true
+
+🎯 NEXT STEPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Run setup scripts (./setup-consent.sh)
+2. Start all three servers
+3. Test on React site
+4. Test on Angular site  
+5. Verify cross-domain sync
+6. Review documentation
+7. Plan production deployment
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                     🎉 READY TO START TESTING! 🎉                        ║
+╚═══════════════════════════════════════════════════════════════════════════╝
