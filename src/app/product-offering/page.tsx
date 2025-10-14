@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
 import React from "react";
+import ProductClient from "./ProductClient";
 
 // Orbit Component - Inline
 function computeDelay(idx: number, total: number, speed: number): string {
@@ -420,6 +421,7 @@ export default function ProductOfferingPage() {
 
   return (
     <div className="min-h-screen">
+      <ProductClient />
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950/40 to-slate-900 py-20 md:py-32">
         {/* Animated Background */}

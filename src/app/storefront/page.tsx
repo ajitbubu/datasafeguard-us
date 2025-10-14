@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
+import StorefrontClient from "./StorefrontClient";
 
 // Icon Component
 const Icon = ({ name, className = "w-5 h-5" }: { name: string; className?: string }) => {
@@ -207,6 +208,7 @@ export default function StorefrontPage() {
 
   return (
     <div className="min-h-screen">
+      <StorefrontClient />
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950/40 to-slate-900 py-20 md:py-32">
         {/* Animated Background */}

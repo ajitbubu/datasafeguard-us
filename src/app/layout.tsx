@@ -5,10 +5,12 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { ThemeProvider } from "../components/ThemeProvider";
 import GoogleAnalytics from "../components/GoogleAnalytics";
+import GoogleTagManager, { GoogleTagManagerNoScript } from "../components/GoogleTagManager";
 import StructuredData from "../components/StructuredData";
 import PerformanceMonitor from "../components/PerformanceMonitor";
 import ScrollToTop from "../components/ScrollToTop";
 import { Analytics } from "@vercel/analytics/next";
+import { ConsentProvider } from "@/components/ConsentProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -76,17 +78,21 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.variable} ${poppins.variable} ${spaceGrotesk.variable} antialiased bg-background text-foreground min-h-screen flex flex-col transition-colors duration-300`}>
+        <GoogleTagManager />
+        <GoogleTagManagerNoScript />
         <GoogleAnalytics />
         <StructuredData />
         <PerformanceMonitor />
-        <ThemeProvider>
-          <Navbar />
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
-          <ScrollToTop />
-        </ThemeProvider>
+        <ConsentProvider>
+          <ThemeProvider>
+            <Navbar />
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
+            <ScrollToTop />
+          </ThemeProvider>
+        </ConsentProvider>
         <Analytics />
       </body>
     </html>
