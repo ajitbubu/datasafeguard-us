@@ -43,6 +43,21 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
         const detectedJurisdiction = detectJurisdiction();
         setJurisdiction(detectedJurisdiction);
 
+        // First check localStorage for quick load
+        try {
+          const localConsent = localStorage.getItem('ds_consent');
+          if (localConsent) {
+            const parsed = JSON.parse(localConsent);
+            setConsentState(parsed);
+            setHasDecided(true);
+            console.log('[ConsentProvider] Consent loaded from localStorage');
+            setLoading(false);
+            return; // Exit early if we have local consent
+          }
+        } catch (error) {
+          console.error('[ConsentProvider] Error reading localStorage:', error);
+        }
+
         // Initialize API
         if (!consentAPIInstance) {
           consentAPIInstance = new CrossDomainConsentAPI({
@@ -54,7 +69,7 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
           });
         }
 
-        // Check for existing consent
+        // Check for existing consent from API
         const result: ConsentCheckResult = await consentAPIInstance.checkConsent();
         
         if (result.hasConsent && result.preferences) {
@@ -121,19 +136,31 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
   const setConsent = useCallback(async (updates: Partial<ConsentPreferences>) => {
     const newConsent = { ...consent, ...updates };
     setConsentState(newConsent);
+    setHasDecided(true); // Always mark as decided when user makes a choice
 
+    // Save to localStorage as fallback
+    try {
+      localStorage.setItem('ds_consent', JSON.stringify(newConsent));
+    } catch (error) {
+      console.error('[ConsentProvider] Failed to save to localStorage:', error);
+    }
+
+    // Also try to save via API if available
     if (consentAPIInstance) {
-      const result = await consentAPIInstance.saveConsent(newConsent);
-      if (result.success) {
-        setHasDecided(true);
-        console.log('[ConsentProvider] Consent saved successfully');
-        
-        // Log domains where consent applies
-        if (result.appliesTo) {
-          console.log('[ConsentProvider] Consent applies to:', result.appliesTo);
+      try {
+        const result = await consentAPIInstance.saveConsent(newConsent);
+        if (result.success) {
+          console.log('[ConsentProvider] Consent saved successfully');
+          
+          // Log domains where consent applies
+          if (result.appliesTo) {
+            console.log('[ConsentProvider] Consent applies to:', result.appliesTo);
+          }
+        } else {
+          console.error('[ConsentProvider] Failed to save consent:', result.error);
         }
-      } else {
-        console.error('[ConsentProvider] Failed to save consent:', result.error);
+      } catch (error) {
+        console.error('[ConsentProvider] API error:', error);
       }
     }
   }, [consent]);
