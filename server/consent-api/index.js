@@ -44,9 +44,12 @@ const getAllowedDomains = () => {
       domains.push(`http://${domain}`); // For development
     });
   });
-  // Add localhost for development
-  domains.push('http://localhost:3000');
-  domains.push('http://localhost:3001');
+  // Add localhost for development (all common ports)
+  const localhostPorts = [3000, 3001, 3002, 3003, 4000, 5000, 8000, 8080];
+  localhostPorts.forEach(port => {
+    domains.push(`http://localhost:${port}`);
+    domains.push(`http://127.0.0.1:${port}`);
+  });
   return domains;
 };
 
@@ -58,15 +61,19 @@ app.use(cors({
     // Allow requests with no origin (mobile apps, curl, etc.)
     if (!origin) return callback(null, true);
     
-    // In development, allow all localhost origins
-    if (process.env.NODE_ENV !== 'production' && origin.includes('localhost')) {
-      return callback(null, true);
+    // In development, allow all localhost and 127.0.0.1 origins (any port)
+    if (process.env.NODE_ENV !== 'production') {
+      if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+        console.log(`✓ Allowed origin: ${origin}`);
+        return callback(null, true);
+      }
     }
     
     if (allowedDomains.includes(origin)) {
+      console.log(`✓ Allowed origin: ${origin}`);
       callback(null, true);
     } else {
-      console.log(`Blocked origin: ${origin}`);
+      console.log(`✗ Blocked origin: ${origin}`);
       callback(new Error('Not allowed by CORS'));
     }
   },
