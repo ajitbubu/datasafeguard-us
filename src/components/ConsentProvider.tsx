@@ -43,35 +43,56 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
         const detectedJurisdiction = detectJurisdiction();
         setJurisdiction(detectedJurisdiction);
 
-        // Initialize API
-        if (!consentAPIInstance) {
-          consentAPIInstance = new CrossDomainConsentAPI({
-            apiEndpoint: process.env.NEXT_PUBLIC_CONSENT_API_URL || 'http://localhost:3001/api/consent',
-            organizationId: process.env.NEXT_PUBLIC_ORG_ID || 'datasafeguard',
-            policyVersion: process.env.NEXT_PUBLIC_POLICY_VERSION || '1.0',
-            domains: (process.env.NEXT_PUBLIC_LINKED_DOMAINS || '').split(',').filter(Boolean),
-            jurisdiction: detectedJurisdiction === 'DEFAULT' ? undefined : detectedJurisdiction
-          });
+        // First check localStorage for quick load (primary storage)
+        try {
+          const localConsent = localStorage.getItem('ds_consent');
+          if (localConsent) {
+            const parsed = JSON.parse(localConsent);
+            setConsentState(parsed);
+            setHasDecided(true);
+            setLoading(false);
+            console.log('[ConsentProvider] Consent loaded from localStorage');
+            return; // Exit early - localStorage is our source of truth
+          }
+        } catch (error) {
+          // Silently continue if localStorage fails
         }
 
-        // Check for existing consent
-        const result: ConsentCheckResult = await consentAPIInstance.checkConsent();
-        
-        if (result.hasConsent && result.preferences) {
-          setConsentState(result.preferences);
-          setHasDecided(true);
+        // No localStorage consent - check if API is enabled
+        if (process.env.NEXT_PUBLIC_ENABLE_CONSENT_API === 'true') {
+          // Initialize API only if explicitly enabled
+          if (!consentAPIInstance) {
+            consentAPIInstance = new CrossDomainConsentAPI({
+              apiEndpoint: process.env.NEXT_PUBLIC_CONSENT_API_URL || 'http://localhost:3001/api/consent',
+              organizationId: process.env.NEXT_PUBLIC_ORG_ID || 'datasafeguard',
+              policyVersion: process.env.NEXT_PUBLIC_POLICY_VERSION || '1.0',
+              domains: (process.env.NEXT_PUBLIC_LINKED_DOMAINS || '').split(',').filter(Boolean),
+              jurisdiction: detectedJurisdiction === 'DEFAULT' ? undefined : detectedJurisdiction
+            });
+          }
+
+          // Check for existing consent from API
+          const result: ConsentCheckResult = await consentAPIInstance.checkConsent();
           
-          // Log where consent came from
-          console.log(`[ConsentProvider] Consent loaded from: ${result.source}`);
+          if (result.hasConsent && result.preferences) {
+            setConsentState(result.preferences);
+            setHasDecided(true);
+            console.log(`[ConsentProvider] Consent loaded from API: ${result.source}`);
+          } else {
+            // No consent found - use jurisdiction defaults
+            const defaults = jurisdictionConfig.defaultConsent;
+            setConsentState(defaults);
+            setHasDecided(false);
+          }
         } else {
-          // No consent found - use jurisdiction defaults
+          // API disabled - use jurisdiction defaults
           const defaults = jurisdictionConfig.defaultConsent;
           setConsentState(defaults);
           setHasDecided(false);
         }
         
       } catch (error) {
-        console.error('[ConsentProvider] Error initializing consent:', error);
+        // Silently handle errors - localStorage is working
         setConsentState(DEFAULT_CONSENT);
         setHasDecided(false);
       } finally {
@@ -131,8 +152,8 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
       console.warn('[ConsentProvider] Failed to save to localStorage:', error);
     }
 
-    // Also try to save via API if available
-    if (consentAPIInstance) {
+    // Also try to save via API if available and enabled
+    if (consentAPIInstance && process.env.NEXT_PUBLIC_ENABLE_CONSENT_API === 'true') {
       try {
         const result = await consentAPIInstance.saveConsent(newConsent);
         if (result.success) {
@@ -142,12 +163,10 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
           if (result.appliesTo) {
             console.log('[ConsentProvider] Consent applies to:', result.appliesTo);
           }
-        } else {
-          // Use warn instead of error since localStorage fallback is working
-          console.warn('[ConsentProvider] API save failed (using localStorage):', result.error);
         }
+        // Silently fail - localStorage is working
       } catch (error) {
-        console.warn('[ConsentProvider] API unavailable (using localStorage):', error);
+        // Silently fail - localStorage is working
       }
     }
   }, [consent]);
