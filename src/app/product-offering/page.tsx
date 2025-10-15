@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import React from "react";
 import ProductClient from "./ProductClient";
+import ConsentIframe from "@/components/ConsentIframe";
 
 // Orbit Component - Inline
 function computeDelay(idx: number, total: number, speed: number): string {
@@ -772,6 +773,68 @@ export default function ProductOfferingPage() {
             </motion.div>
           ))}
         </div>
+      </section>
+
+      {/* Video Demo Section */}
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <motion.div
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            See It <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">In Action</span>
+          </h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Watch how DataSafeguard protects your sensitive data in real-time
+          </p>
+        </motion.div>
+
+        <motion.div
+          className="max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+        >
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+            <ConsentIframe
+              src="https://www.youtube.com/embed/b_SkKSFWGmw?si=YcZfZbh3uHdZFOk6"
+              title="DataSafeguard Product Demo"
+              width="100%"
+              height="500"
+              category="marketing"
+              provider="YouTube"
+              className="w-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen={true}
+              frameBorder="0"
+              referrerPolicy="strict-origin-when-cross-origin"
+            />
+          </div>
+
+          <motion.div
+            className="mt-8 text-center"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+          >
+            <p className="text-sm text-muted-foreground mb-4">
+              Want a personalized demo tailored to your use case?
+            </p>
+            <Link
+              href="/contact-us"
+              className="inline-flex items-center gap-2 text-primary hover:underline font-semibold"
+            >
+              Schedule a Live Demo
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </Link>
+          </motion.div>
+        </motion.div>
       </section>
 
       {/* Deployment Options */}

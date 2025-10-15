@@ -1,39 +1,163 @@
 "use client";
 
 import { useConsent } from "./ConsentProvider";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CATEGORY_DESCRIPTIONS } from "@/lib/consent/jurisdictions";
+import type { ConsentPreferences } from "@/lib/consent/types";
 
 export default function ConsentBanner() {
   const { consent, setConsent, hasDecided, jurisdiction, jurisdictionConfig } = useConsent();
   const [showDetails, setShowDetails] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [initialized, setInitialized] = useState(false);
+  
+  // Local state for checkbox selections (doesn't save until user clicks a button)
+  const [localPreferences, setLocalPreferences] = useState<ConsentPreferences>({
+    necessary: true,
+    preferences: false,
+    analytics: false,
+    marketing: false
+  });
 
-  if (hasDecided) return null;
+  // Prevent hydration mismatch by only rendering after mount
+  useEffect(() => {
+    console.log('[ConsentBanner] Component mounted');
+    setMounted(true);
+  }, []);
+
+  // Reset initialized flag when banner closes
+  useEffect(() => {
+    if (hasDecided && initialized) {
+      console.log('[ConsentBanner] Banner closed - resetting initialized flag');
+      setInitialized(false);
+    }
+  }, [hasDecided, initialized]);
+
+  // Load preferences from database when banner opens
+  useEffect(() => {
+    if (mounted && !hasDecided && !initialized) {
+      console.log('[ConsentBanner] Banner opened - loading preferences from database');
+      
+      const loadPreferences = async () => {
+        try {
+          // First try localStorage (primary storage)
+          const localConsent = localStorage.getItem('ds_consent_v2');
+          if (localConsent) {
+            const parsed = JSON.parse(localConsent);
+            const preferences = parsed.preferences || parsed;
+            console.log('[ConsentBanner] ✅ Loaded preferences from localStorage:', preferences);
+            setLocalPreferences(preferences);
+            setInitialized(true);
+            return;
+          }
+
+          // If API is enabled, try loading from API
+          if (process.env.NEXT_PUBLIC_ENABLE_CONSENT_API === 'true') {
+            const response = await fetch(
+              `${process.env.NEXT_PUBLIC_CONSENT_API_URL || 'http://localhost:3001/api/consent'}?organizationId=${process.env.NEXT_PUBLIC_ORG_ID || 'datasafeguard'}`,
+              { credentials: 'include' }
+            );
+            
+            if (response.ok) {
+              const data = await response.json();
+              if (data.hasConsent && data.preferences) {
+                console.log('[ConsentBanner] ✅ Loaded preferences from API:', data.preferences);
+                setLocalPreferences(data.preferences);
+                setInitialized(true);
+                return;
+              }
+            }
+          }
+
+          // No stored preferences found - use current consent state from provider
+          console.log('[ConsentBanner] No stored preferences found, using current consent:', consent);
+          setLocalPreferences(consent);
+          setInitialized(true);
+        } catch (error) {
+          console.error('[ConsentBanner] Error loading preferences:', error);
+          // Fallback to current consent state
+          setLocalPreferences(consent);
+          setInitialized(true);
+        }
+      };
+
+      loadPreferences();
+    }
+  }, [mounted, hasDecided, initialized, consent]);
+
+  // Log render decision
+  useEffect(() => {
+    console.log('[ConsentBanner] Render check - mounted:', mounted, 'hasDecided:', hasDecided);
+    if (!mounted) {
+      console.log('[ConsentBanner] ❌ Not rendering: not mounted yet');
+    } else if (hasDecided) {
+      console.log('[ConsentBanner] ❌ Not rendering: hasDecided is true');
+    } else {
+      console.log('[ConsentBanner] ✅ RENDERING BANNER!');
+    }
+  }, [mounted, hasDecided]);
+
+  if (!mounted || hasDecided) return null;
 
   const handleAcceptAll = async () => {
-    await setConsent({
+    const allAccepted = {
       necessary: true,
       preferences: true,
       analytics: true,
       marketing: true
-    });
+    };
+    
+    // Show details to display the checkboxes
+    setShowDetails(true);
+    
+    // Update local state immediately to show checkboxes
+    setLocalPreferences(allAccepted);
+    
+    // Wait a moment to show the updated checkboxes
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    // Save to database
+    await setConsent(allAccepted);
+    
+    console.log('[ConsentBanner] ✅ Accept All - saved to DB and updated checkboxes');
   };
 
   const handleRejectAll = async () => {
-    await setConsent({
+    const allRejected = {
       necessary: true,
       preferences: false,
       analytics: false,
       marketing: false
-    });
+    };
+    
+    // Show details to display the checkboxes
+    setShowDetails(true);
+    
+    // Update local state immediately to show checkboxes
+    setLocalPreferences(allRejected);
+    
+    // Wait a moment to show the updated checkboxes
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    // Save to database
+    await setConsent(allRejected);
+    
+    console.log('[ConsentBanner] ✅ Reject All - saved to DB and updated checkboxes');
   };
 
   const handleSavePreferences = async () => {
-    await setConsent(consent);
+    // Save the local preferences (from checkboxes) to database
+    await setConsent(localPreferences);
+    
+    console.log('[ConsentBanner] ✅ Save Preferences - saved to DB:', localPreferences);
   };
 
   const toggleCategory = (category: 'preferences' | 'analytics' | 'marketing') => {
-    setConsent({ [category]: !consent[category] });
+    // Only update local state, don't save yet
+    setLocalPreferences(prev => ({
+      ...prev,
+      [category]: !prev[category]
+    }));
   };
 
   const linkedDomains = (process.env.NEXT_PUBLIC_LINKED_DOMAINS || '').split(',').filter(Boolean);
@@ -105,7 +229,7 @@ export default function ConsentBanner() {
             <div className="flex items-start gap-3">
               <input
                 type="checkbox"
-                checked={consent.preferences}
+                checked={localPreferences.preferences}
                 onChange={() => toggleCategory('preferences')}
                 className="mt-1 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
@@ -128,7 +252,7 @@ export default function ConsentBanner() {
             <div className="flex items-start gap-3">
               <input
                 type="checkbox"
-                checked={consent.analytics}
+                checked={localPreferences.analytics}
                 onChange={() => toggleCategory('analytics')}
                 className="mt-1 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
@@ -151,7 +275,7 @@ export default function ConsentBanner() {
             <div className="flex items-start gap-3">
               <input
                 type="checkbox"
-                checked={consent.marketing}
+                checked={localPreferences.marketing}
                 onChange={() => toggleCategory('marketing')}
                 className="mt-1 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
@@ -173,31 +297,33 @@ export default function ConsentBanner() {
         )}
 
         {/* Actions */}
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-3">
+          {/* Primary CTA - Accept All */}
           <button
             onClick={handleAcceptAll}
-            className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+            className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors shadow-sm order-1"
           >
             {jurisdictionConfig.consentButtonText.acceptAll}
           </button>
 
-          <button
-            onClick={handleSavePreferences}
-            className="px-6 py-2.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-medium rounded-lg transition-colors"
-          >
-            {jurisdictionConfig.consentButtonText.savePreferences}
-          </button>
-
+          {/* Secondary Actions */}
           <button
             onClick={handleRejectAll}
-            className="px-6 py-2.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-medium rounded-lg transition-colors"
+            className="px-6 py-2.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-medium rounded-lg transition-colors order-2"
           >
             {jurisdictionConfig.consentButtonText.rejectAll}
           </button>
 
           <button
+            onClick={handleSavePreferences}
+            className="px-6 py-2.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-medium rounded-lg transition-colors order-3"
+          >
+            {jurisdictionConfig.consentButtonText.savePreferences}
+          </button>
+
+          <button
             onClick={() => setShowDetails(!showDetails)}
-            className="px-4 py-2.5 text-blue-600 dark:text-blue-400 font-medium hover:underline"
+            className="px-4 py-2.5 text-blue-600 dark:text-blue-400 font-medium hover:underline order-4"
           >
             {showDetails ? 'Hide Details' : 'Show Details'}
           </button>

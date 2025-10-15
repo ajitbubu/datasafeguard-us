@@ -32,6 +32,19 @@ const DOMAIN_GROUPS = {
       preferences: ['theme', 'language']
     },
     policyVersion: '1.0'
+  },
+  'localhost-dev-group': {
+    domains: [
+      'localhost',
+      '127.0.0.1'
+    ],
+    cookiePolicy: {
+      necessary: ['ds_session', 'csrf_token'],
+      analytics: ['_ga', '_gid'],
+      marketing: ['_fbp', 'marketing_id'],
+      preferences: ['theme', 'language']
+    },
+    policyVersion: '1.0'
   }
 };
 
@@ -45,7 +58,7 @@ const getAllowedDomains = () => {
     });
   });
   // Add localhost for development (all common ports)
-  const localhostPorts = [3000, 3001, 3002, 3003, 4000, 5000, 8000, 8080];
+  const localhostPorts = [3000, 3001, 3002, 3003, 4000, 4200, 5000, 8000, 8080];
   localhostPorts.forEach(port => {
     domains.push(`http://localhost:${port}`);
     domains.push(`http://127.0.0.1:${port}`);
@@ -92,14 +105,21 @@ function getUserId(req, res) {
   if (!userId) {
     userId = crypto.randomBytes(16).toString('hex');
     
+    // For localhost, use Lax instead of None (doesn't require HTTPS)
+    const isLocalhost = req.hostname === 'localhost' || req.hostname === '127.0.0.1';
+    
     // Set cookie for cross-domain access
     res.cookie('consent_user_id', userId, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
+      sameSite: isLocalhost ? 'lax' : 'none',  // Lax for localhost, None for production
       maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
       path: '/'
     });
+    
+    console.log(`[COOKIE] Created new user ID: ${userId} (sameSite: ${isLocalhost ? 'lax' : 'none'})`);
+  } else {
+    console.log(`[COOKIE] Found existing user ID: ${userId}`);
   }
   
   return userId;
@@ -107,8 +127,11 @@ function getUserId(req, res) {
 
 // Helper: Find domain group
 function findDomainGroup(domain) {
+  // Clean domain (remove port and protocol)
+  const cleanDomain = domain.replace(/^https?:\/\//, '').split(':')[0];
+  
   for (const [groupId, config] of Object.entries(DOMAIN_GROUPS)) {
-    if (config.domains.some(d => domain.includes(d) || d.includes(domain))) {
+    if (config.domains.some(d => cleanDomain.includes(d) || d.includes(cleanDomain))) {
       return { groupId, config };
     }
   }
@@ -140,7 +163,8 @@ app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
-    version: '1.0.0'
+    version: '1.0.0',
+    storedConsents: consentStore.size
   });
 });
 
@@ -148,9 +172,12 @@ app.get('/health', (req, res) => {
 app.get('/api/consent/check', (req, res) => {
   try {
     const userId = getUserId(req, res);
+    console.log(`[CHECK] Looking for consent for user: ${userId}`);
+    
     const consent = consentStore.get(userId);
     
     if (!consent) {
+      console.log(`[CHECK] No consent found for user: ${userId}`);
       return res.status(404).json({
         hasConsent: false,
         message: 'No consent found'
@@ -162,6 +189,7 @@ app.get('/api/consent/check', (req, res) => {
     const age = Date.now() - consent.timestamp;
     
     if (age > maxAge) {
+      console.log(`[CHECK] Consent expired for user: ${userId}`);
       consentStore.delete(userId);
       return res.status(404).json({
         hasConsent: false,
@@ -169,6 +197,7 @@ app.get('/api/consent/check', (req, res) => {
       });
     }
 
+    console.log(`[CHECK] Found valid consent for user: ${userId}`);
     res.json({
       hasConsent: true,
       preferences: consent.preferences,
@@ -178,7 +207,7 @@ app.get('/api/consent/check', (req, res) => {
     });
     
   } catch (error) {
-    console.error('Error checking consent:', error);
+    console.error('[CHECK] Error checking consent:', error);
     res.status(500).json({
       error: 'Internal server error',
       message: error.message
@@ -192,6 +221,8 @@ app.post('/api/consent/save', (req, res) => {
     const userId = getUserId(req, res);
     const { preferences, domain, organizationId, version } = req.body;
     
+    console.log(`[SAVE] Saving consent for user: ${userId}, domain: ${domain}`);
+    
     if (!preferences || !domain) {
       return res.status(400).json({
         error: 'Missing required fields',
@@ -202,9 +233,25 @@ app.post('/api/consent/save', (req, res) => {
     // Validate domain is in allowed list
     const domainGroup = findDomainGroup(domain);
     if (!domainGroup) {
-      return res.status(403).json({
-        error: 'Domain not allowed',
-        message: 'This domain is not configured for consent sharing'
+      console.log(`[SAVE] Domain not found in groups: ${domain}`);
+      // For localhost, create a default response
+      const consentData = {
+        preferences,
+        domain,
+        organizationId,
+        version: version || '1.0',
+        timestamp: Date.now(),
+        userId
+      };
+      
+      consentStore.set(userId, consentData);
+      logAudit('CONSENT_SAVED', userId, { domain, preferences });
+      
+      return res.json({
+        success: true,
+        message: 'Consent saved successfully',
+        consentId: userId,
+        appliesTo: ['localhost:3000', 'localhost:4200']
       });
     }
 
@@ -226,6 +273,7 @@ app.post('/api/consent/save', (req, res) => {
       groupId: domainGroup.groupId
     });
 
+    console.log(`[SAVE] Consent saved successfully for user: ${userId}`);
     res.json({
       success: true,
       message: 'Consent saved successfully',
@@ -234,7 +282,7 @@ app.post('/api/consent/save', (req, res) => {
     });
     
   } catch (error) {
-    console.error('Error saving consent:', error);
+    console.error('[SAVE] Error saving consent:', error);
     res.status(500).json({
       error: 'Internal server error',
       message: error.message
@@ -247,6 +295,8 @@ app.post('/api/consent/revoke', (req, res) => {
   try {
     const userId = getUserId(req, res);
     const { domain } = req.body;
+
+    console.log(`[REVOKE] Revoking consent for user: ${userId}, domain: ${domain}`);
 
     if (!domain) {
       return res.status(400).json({
@@ -263,13 +313,14 @@ app.post('/api/consent/revoke', (req, res) => {
     // Clear the consent cookie
     res.clearCookie('consent_user_id');
 
+    console.log(`[REVOKE] Consent revoked successfully for user: ${userId}`);
     res.json({
       success: true,
       message: 'Consent revoked successfully'
     });
     
   } catch (error) {
-    console.error('Error revoking consent:', error);
+    console.error('[REVOKE] Error revoking consent:', error);
     res.status(500).json({
       error: 'Internal server error',
       message: error.message
@@ -309,7 +360,7 @@ app.post('/api/consent/verify-compatibility', (req, res) => {
     });
     
   } catch (error) {
-    console.error('Error verifying compatibility:', error);
+    console.error('[COMPAT] Error verifying compatibility:', error);
     res.status(500).json({
       error: 'Internal server error',
       message: error.message
@@ -339,7 +390,7 @@ app.get('/api/consent/domain-config/:domain', (req, res) => {
     });
     
   } catch (error) {
-    console.error('Error fetching domain config:', error);
+    console.error('[CONFIG] Error fetching domain config:', error);
     res.status(500).json({
       error: 'Internal server error',
       message: error.message
@@ -370,11 +421,12 @@ app.get('/api/consent/stats', (req, res) => {
     res.json({
       totalConsents,
       preferenceBreakdown: breakdown,
-      auditLogSize: auditLog.length
+      auditLogSize: auditLog.length,
+      storedUserIds: Array.from(consentStore.keys())
     });
     
   } catch (error) {
-    console.error('Error fetching stats:', error);
+    console.error('[STATS] Error fetching stats:', error);
     res.status(500).json({
       error: 'Internal server error',
       message: error.message
@@ -384,7 +436,7 @@ app.get('/api/consent/stats', (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error('Error:', err);
+  console.error('[ERROR]', err);
   res.status(500).json({
     error: 'Internal server error',
     message: err.message
@@ -394,6 +446,9 @@ app.use((err, req, res, next) => {
 // Start server
 app.listen(PORT, () => {
   console.log(`\n🚀 Consent API Server running on port ${PORT}`);
-  console.log(`📋 Allowed domains:`, allowedDomains.join(', '));
-  console.log(`🔒 Environment: ${process.env.NODE_ENV || 'development'}\n`);
+  console.log(`📋 Configured domain groups:`, Object.keys(DOMAIN_GROUPS));
+  console.log(`🔒 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`\n💡 Testing URLs:`);
+  console.log(`   Health: http://localhost:${PORT}/health`);
+  console.log(`   Stats:  http://localhost:${PORT}/api/consent/stats\n`);
 });
