@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function ContactUsPage() {
   // Form state
@@ -24,6 +24,27 @@ export default function ContactUsPage() {
     { href: "https://www.youtube.com/@DataSafeguard", label: "YouTube", icon: "youtube" },
     { href: "https://x.com/Data_Safeguard", label: "Twitter/X", icon: "twitter" },
   ];
+
+  useEffect(() => {
+    function setCookie(name: string, value: string | number | boolean, days: number) {
+      const expires = new Date(Date.now() + days * 864e5).toUTCString();
+      document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/contact-us`;
+    }
+
+    function getCookie(name: string) {
+      return document.cookie
+        .split("; ")
+        .find(row => row.startsWith(name + "="))
+        ?.split("=")[1];
+    }
+
+    if (!getCookie("scan_cookie")) {
+      setCookie("scan_cookie", "valid", 7);
+      console.log("Scan cookie created (path=/contact-us)");
+    } else {
+      console.log("Scan cookie already exists");
+    }
+  }, []);
 
   const contactInfo = [
     {
